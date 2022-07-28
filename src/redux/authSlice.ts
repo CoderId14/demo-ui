@@ -1,14 +1,42 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+
+interface UserLogin {
+  username: string;
+  password: string;
+  accessToken?: string;
+}
+
+interface UserRegister {
+  username: string;
+  password: string;
+  email: string;
+}
+
+interface UsersLoginSliceState {
+  users: UserLogin[];
+  isFetching: boolean;
+  error: boolean;
+}
+
+interface UsersRegisterSliceState {
+  users: UserRegister[];
+  isFetching: boolean;
+  error: boolean;
+}
+
+const loginInitialState: UsersLoginSliceState = {
+  users: [],
+  isFetching: false,
+  error: false,
+};
+
+const registerInitialState: UsersSliceState = {};
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    login: {
-      currentUser: null,
-      isFetching: false,
-      error: false,
-    },
+    login: loginInitialState,
     register: {
       isFetching: false,
       error: false,
@@ -19,9 +47,9 @@ const authSlice = createSlice({
     loginStart: (state) => {
       state.login.isFetching = true;
     },
-    loginSuccess: (state, action) => {
+    loginSuccess: (state, action: PayloadAction<UsersSliceState>) => {
       state.login.isFetching = false;
-      state.login.currentUser = action.payload;
+      state.login.users = action.payload.users;
       state.login.error = false;
     },
     loginFailed: (state) => {

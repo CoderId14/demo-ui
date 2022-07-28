@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { StringLiteral } from "typescript";
 
 import authReducer from "./authSlice";
 import postReducer from "./postSlice";
