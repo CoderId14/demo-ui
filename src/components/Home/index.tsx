@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { selectAuth } from "../../redux/authSlice";
+import { selectAuth } from "../../redux/store";
 import { useEffect } from "react";
 import { getAllPosts } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Props {
   children?: JSX.Element;
@@ -17,29 +17,21 @@ interface User {
 }
 
 const Home = () => {
-  const user: User = useSelector(
-    (state): RootState => state.auth.login?.currentUser,
-  );
-
+  const user = useSelector(selectAuth).login.user;
+  const accessToken = user.accessToken ? user.accessToken : "";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!user.username) {
       navigate("/login");
     }
-    getAllPosts(user.accessToken, dispatch);
-  });
+    if (!accessToken.match("")) {
+      getAllPosts(accessToken, dispatch);
+    }
+  }, []);
 
-  return (
-    <div>
-      <h1> Home </h1>
-      {/* <h2>
-        {" "}
-        Hi , <span> {user && user.username} </span>
-      </h2> */}
-    </div>
-  );
+  return <div>{user.username && <h1>Hello {user.username}</h1>}</div>;
 };
 
 export default Home;

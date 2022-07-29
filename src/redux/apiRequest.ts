@@ -9,6 +9,9 @@ import {
   registerStart,
   registerSuccess,
   registerFailed,
+  logoutStart,
+  logoutSuccess,
+  logoutFailed,
 } from "./authSlice";
 import { getPostsFailed, getPostsStart } from "./postSlice";
 
@@ -16,6 +19,7 @@ const baseURL = "http://localhost:8080";
 const LOGIN_URL = "/api/auth/login";
 const REGISTER_URL = "/api/auth/register";
 const POST_URL = "/api/post";
+const LOGOUT_URL = "/api/auth/logout";
 
 type UserRegister = {
   username: string;
@@ -40,6 +44,7 @@ export const loginUser = async (
     );
     dispatch(loginSuccess(res.data));
     navigate("/");
+    return res;
   } catch (error) {
     dispatch(loginFailed);
   }
@@ -60,13 +65,32 @@ export const registerUser = async (
   }
 };
 
+export const logOut = async (
+  dispatch: Dispatch,
+  username: string,
+  navigate: NavigateFunction,
+  accessToken: string,
+) => {
+  dispatch(logoutStart());
+  try {
+    const res = await axios.post(baseURL + LOGOUT_URL, username, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    dispatch(logoutSuccess(res.data));
+  } catch (error) {
+    dispatch(logoutFailed("log out failed"));
+  }
+};
+
 export const getAllPosts = async (accessToken: string, dispatch: Dispatch) => {
   dispatch(getPostsStart());
 
   try {
     const res = await axios.get(baseURL + POST_URL, {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
   } catch (error) {

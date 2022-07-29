@@ -10,14 +10,14 @@ const postSlice = createSlice({
     },
   },
   reducers: {
-    getPostsStart: (state) => {
+    getPostsStart: (state: any) => {
       state.posts.isFetching = true;
     },
-    getPostsSuccess: (state, action) => {
+    getPostsSuccess: (state: any, action: any) => {
       state.posts.isFetching = false;
       state.posts.allPosts = action.payload.allPosts;
     },
-    getPostsFailed: (state) => {
+    getPostsFailed: (state: any) => {
       state.posts.isFetching = false;
       state.posts.error = true;
     },

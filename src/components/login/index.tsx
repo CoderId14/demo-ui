@@ -12,8 +12,8 @@ function Login() {
   const userRef = useRef<HTMLParagraphElement>(null);
   const errRef = useRef();
 
-  const [user, setUser] = useState<string>("");
-  const [pwd, setPwd] = useState<string>("");
+  const [username, setUser] = useState<string>("");
+  const [password, setPwd] = useState<string>("");
   const [errMsg, setErrMsg] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
 
@@ -25,19 +25,20 @@ function Login() {
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd]);
+  }, [username, password]);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const newUser = {
-      username: user,
-      password: pwd,
+      username: username,
+      password: password,
     };
-    loginUser(newUser, dispatch, navigate);
+    const res = loginUser(newUser, dispatch, navigate);
   };
 
   return (
-    <section>
+    <section className="container">
+      <pre>{JSON.stringify({ username: username, password: password })}</pre>
       <h1 className="text-bold">Login</h1>
       {success ? <p>Success</p> : <p>Error</p>}
       <Form onSubmit={handleSubmit}>
@@ -52,8 +53,10 @@ function Login() {
             type="text"
             placeholder="Enter username or email"
             className={styles.input}
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setUser(e.currentTarget.value)
+            }
+            value={username}
             required
           />
         </Form.Group>
@@ -64,8 +67,10 @@ function Login() {
             type="password"
             placeholder="Password"
             className={styles.input}
-            onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPwd(e.currentTarget.value)
+            }
+            value={password}
             required
           />
         </Form.Group>
@@ -76,16 +81,15 @@ function Login() {
         <Form.Group>
           <Form.Text>
             Need an Account? <br />
-            <Link to="/signUp" className="text">
-              Sign Up
+            <Link to="/register" className="text">
+              Register
             </Link>
           </Form.Text>
         </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Login with Google
-        </Button>
       </Form>
+      <Button variant="primary" type="submit">
+        Login with Google
+      </Button>
     </section>
   );
 }
