@@ -19,8 +19,8 @@ import { selectAuth } from "./redux/store";
 // import PrivateRoutes from "./routes/PrivateRoutes";
 
 function App() {
-  const user = useSelector(selectAuth).login.user;
-  const navigate = useNavigate();
+  // const user = useSelector(selectAuth).login.user;
+  // const navigate = useNavigate();
   return (
     <Router>
       <div className="app">

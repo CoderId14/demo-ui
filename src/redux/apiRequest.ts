@@ -29,6 +29,58 @@ type UserRegister = {
 type UserLogin = {
   username: string;
   password: string;
+  accessToken?: string;
+};
+
+type User = {
+  username: string;
+  accessToken?: string;
+};
+interface UserSliceState {
+  user: User | undefined;
+  isFetching: boolean;
+  error: boolean;
+  message: string;
+}
+
+interface UserLoginSliceState {
+  user: UserLogin | undefined;
+  isFetching: boolean;
+  error: boolean;
+  message: string;
+}
+export const loginUserWithGoogle = async (
+  accessToken: any,
+  dispatch: Dispatch<AnyAction>,
+  navigate: NavigateFunction,
+) => {
+  dispatch(loginStart());
+  try {
+    let res = await axios.get(baseURL + "/api/user", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log("login with google");
+    let user: UserLogin = {
+      username: res.data.responseData,
+      password: "",
+      accessToken: accessToken,
+    };
+    console.log(
+      "res.data.responseData = " + JSON.stringify(res.data.responseData),
+    );
+    let userSlice: UserLoginSliceState = {
+      user: user,
+      isFetching: false,
+      error: false,
+      message: "Login success",
+    };
+    console.log("userSlice: ", userSlice);
+    dispatch(loginSuccess(userSlice));
+    navigate("/");
+    return res;
+  } catch (error) {
+    dispatch(loginFailed);
+  }
 };
 
 export const loginUser = async (
@@ -42,9 +94,20 @@ export const loginUser = async (
       baseURL + LOGIN_URL,
       user,
     );
-    dispatch(loginSuccess(res.data));
+    console.log("res loginUser: " + JSON.stringify(res.data.responseData));
+    // Data luu vao store
+    let usertemp: User = {
+      username: res.data.responseData.username,
+      accessToken: res.data.responseData.accessToken,
+    };
+    let temp: UserSliceState = {
+      user: usertemp,
+      isFetching: false,
+      error: false,
+      message: "Login success",
+    };
+    dispatch(loginSuccess(temp));
     navigate("/");
-    return res;
   } catch (error) {
     dispatch(loginFailed);
   }
@@ -59,7 +122,7 @@ export const registerUser = async (
   try {
     await axios.post(baseURL + REGISTER_URL, user);
     dispatch(registerSuccess);
-    navigate("/login");
+    navigate("/verify");
   } catch (error) {
     dispatch(registerFailed);
   }
@@ -73,12 +136,12 @@ export const logOut = async (
 ) => {
   dispatch(logoutStart());
   try {
-    const res = await axios.post(baseURL + LOGOUT_URL, username, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    dispatch(logoutSuccess(res.data));
+    // const res = await axios.post(baseURL + LOGOUT_URL, username, {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    // });
+    dispatch(logoutSuccess("Logout succcess"));
   } catch (error) {
     dispatch(logoutFailed("log out failed"));
   }

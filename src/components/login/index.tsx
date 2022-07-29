@@ -5,12 +5,16 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/apiRequest";
+import { selectAuth } from "../../redux/store";
 
 function Login() {
   const userRef = useRef<HTMLParagraphElement>(null);
   const errRef = useRef();
+
+  const login = useSelector(selectAuth).login;
+  const user = login?.user ? login.user : null;
 
   const [username, setUser] = useState<string>("");
   const [password, setPwd] = useState<string>("");
@@ -19,13 +23,17 @@ function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    // userRef.current.focus();
-  }, []);
 
   useEffect(() => {
     setErrMsg("");
   }, [username, password]);
+
+  useEffect(() => {
+    if (user) {
+      alert("You already login");
+      navigate("/");
+    }
+  }, []);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -87,8 +95,10 @@ function Login() {
           </Form.Text>
         </Form.Group>
       </Form>
-      <Button variant="primary" type="submit">
-        Login with Google
+      <Button variant="warning" type="button">
+        <a href="http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:8080/oauth2/callback/google">
+          Login With Google
+        </a>
       </Button>
     </section>
   );

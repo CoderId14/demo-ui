@@ -8,15 +8,31 @@ import { selectAuth } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { logOut } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
+import { useEffect, useRef } from "react";
 
 export const NavbarMain = () => {
-  const user = useSelector(selectAuth).login.user;
-  const accessToken = user.accessToken ? user.accessToken : "";
+  const login = useSelector(selectAuth).login;
+  const user = login?.user ? login.user : null;
+  const accessToken = user?.accessToken ? user.accessToken : "";
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    logOut(dispatch, user.username, navigate, accessToken);
+    if (user) logOut(dispatch, user.username, navigate, accessToken);
   };
+
+  useEffect(() => {
+    if (!user) {
+    }
+  }, []);
+
+  // const handleClick = () => {
+  //   useEffect(() => {
+  //     if (user) {
+  //       alert("You already login");
+  //       navigate("/");
+  //     }
+  //   }, []);
+  // }
 
   return (
     <Navbar bg="light" expand="lg">
@@ -27,15 +43,20 @@ export const NavbarMain = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/login">
-              Login
-            </Nav.Link>
+            {!user && (
+              <Nav.Link as={Link} to="/login">
+                Login
+              </Nav.Link>
+            )}
+
             <Nav.Link as={Link} to="/register">
               Register
             </Nav.Link>
-            <Nav.Link as={Link} to="/logout" onClick={handleLogout}>
-              Logout
-            </Nav.Link>
+            {user && (
+              <Nav.Link as={Link} to="/" onClick={handleLogout}>
+                Logout
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

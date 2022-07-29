@@ -17,13 +17,14 @@ interface User {
 }
 
 const Home = () => {
-  const user = useSelector(selectAuth).login.user;
-  const accessToken = user.accessToken ? user.accessToken : "";
+  const login = useSelector(selectAuth).login;
+  const user = login?.user ? login.user : null;
+  const accessToken = user?.accessToken ? user.accessToken : "";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.username) {
+    if (!user) {
       navigate("/login");
     }
     if (!accessToken.match("")) {
@@ -31,7 +32,7 @@ const Home = () => {
     }
   }, []);
 
-  return <div>{user.username && <h1>Hello {user.username}</h1>}</div>;
+  return <h1>Hello {user && user.username}</h1>;
 };
 
 export default Home;
