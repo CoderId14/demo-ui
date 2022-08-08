@@ -7,6 +7,7 @@ import { StringLiteral } from "typescript";
 
 import authReducer from "./authSlice";
 import postReducer from "./postSlice";
+import userReducer from "./userSlice";
 
 import {
   persistStore,
@@ -31,6 +32,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   posts: postReducer,
+  user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -49,5 +51,6 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export const persistor = persistStore(store);
 export const selectAuth = (state: RootState) => state.auth;
+export const selectUser = (state: RootState) => state.user;
 
 export type AppDispatch = typeof store.dispatch;

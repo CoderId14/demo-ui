@@ -91,7 +91,6 @@ const authSlice = createSlice({
       console.log("action: " + JSON.stringify(action.payload));
       state.login.isFetching = false;
       state.login.user = action.payload.user;
-      console.log(state.login.user.username);
       state.login.error = false;
       state.login.message = action.payload.message;
     },

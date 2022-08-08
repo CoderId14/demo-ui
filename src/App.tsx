@@ -10,6 +10,7 @@ import logo from "./logo.svg";
 import Login from "./components/login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import Register from "./components/register";
 import Home from "./components/Home";
 import { privateRoutes, publicRoutes } from "./routes/index";

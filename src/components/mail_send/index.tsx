@@ -1,20 +1,31 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectAuth } from "../../redux/store";
+import { selectAuth, selectUser } from "../../redux/store";
 import { Link } from "react-router-dom";
 
 const MailRedirect = () => {
   const user = useSelector(selectAuth).register.user;
-  const email = user.email;
+  const emailVerify = user.email;
 
-  if (email) {
+  const emailRecovery = useSelector(selectUser).forgotPassword.email;
+
+  if (emailVerify) {
     return (
       <h1>
         {" "}
-        Go to <a href="gmail.com">{email}</a> to verify your account
+        Go to <a href="gmail.com">{emailVerify}</a> to verify your account
       </h1>
     );
   } else {
+    if (emailRecovery) {
+      return (
+        <h1>
+          {" "}
+          Go to <a href="gmail.com">{emailRecovery}</a> to recovery your
+          password
+        </h1>
+      );
+    }
     return (
       <h1>
         {" "}
