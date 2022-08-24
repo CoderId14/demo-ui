@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { selectAuth } from "../../redux/store";
 import { useEffect } from "react";
-import { getAllPosts } from "../../redux/apiRequest";
+import { getAllPosts } from "../../apiRequests/apiRequest";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 interface Props {
   children?: JSX.Element;
@@ -23,16 +24,11 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-    if (!accessToken.match("")) {
-      getAllPosts(accessToken, dispatch);
-    }
-  }, []);
-
-  return <h1>Hello {user && user.username}</h1>;
+  return (
+    <>
+      <h1>Hello {user && user.username}</h1>
+    </>
+  );
 };
 
 export default Home;
