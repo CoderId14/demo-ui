@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { access } from "fs";
+import { ResponseRegister } from "@/types/user.type";
 
 interface UserLogin {
   username: string;
@@ -32,11 +33,6 @@ interface UserRegister {
   email: string;
 }
 
-interface UserLogout {
-  isFetching: boolean;
-  error: boolean;
-  message: string;
-}
 interface UserLoginSliceState {
   user: User | undefined;
   isFetching: boolean;
@@ -45,10 +41,11 @@ interface UserLoginSliceState {
 }
 
 interface UserRegisterSliceState {
-  user: UserRegister;
+  user: { email: string; username: string };
   isFetching: boolean;
   error: boolean;
   success: boolean;
+  message: string;
 }
 interface UserLogoutSliceState {
   isFetching: boolean;
@@ -64,10 +61,11 @@ const loginInitialState: UserLoginSliceState = {
 };
 
 const registerInitialState: UserRegisterSliceState = {
-  user: { username: "", password: "", email: "" },
+  user: { email: "", username: "" },
   isFetching: false,
   error: false,
   success: false,
+  message: "",
 };
 const logoutInitialState: UserLogoutSliceState = {
   isFetching: false,
@@ -87,10 +85,20 @@ const authSlice = createSlice({
     loginStart: (state: any) => {
       state.login.isFetching = true;
     },
-    loginSuccess: (state: any, action: PayloadAction<UserLoginSliceState>) => {
+    loginSuccess: (state: any, action) => {
       console.log("action: " + JSON.stringify(action.payload));
       state.login.isFetching = false;
-      state.login.user = action.payload.user;
+      state.login.user = action.payload.responseData;
+      state.login.error = false;
+      state.login.message = action.payload.message;
+    },
+    loginGoogleSuccess: (state: any, action) => {
+      console.log("action google login: " + JSON.stringify(action.payload));
+      state.login.isFetching = false;
+      state.login.user = {
+        username: action.payload.responseData,
+        accessToken: action.payload.accessToken,
+      };
       state.login.error = false;
       state.login.message = action.payload.message;
     },
@@ -106,17 +114,22 @@ const authSlice = createSlice({
     registerStart: (state: any) => {
       state.register.isFetching = true;
     },
-    registerSuccess: (state: any) => {
+    registerSuccess: (state: any, action: PayloadAction<ResponseRegister>) => {
+      state.register.user = {
+        email: action.payload.responseData.email,
+        username: action.payload.responseData.username,
+      };
       state.register.isFetching = false;
       state.register.error = false;
       state.register.success = true;
+      state.register.message = action.payload.message;
     },
-    registerFailed: (state: any) => {
+    registerFailed: (state: any, action: PayloadAction<string>) => {
       state.register.isFetching = false;
       state.register.error = true;
       state.register.success = false;
+      state.register.message = action.payload;
     },
-
     logoutStart: (state: any) => {
       state.logout.isFetching = true;
     },
@@ -138,6 +151,7 @@ export const {
   loginStart,
   loginFailed,
   loginSuccess,
+  loginGoogleSuccess,
   registerStart,
   registerFailed,
   registerSuccess,

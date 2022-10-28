@@ -13,7 +13,8 @@ const MailRedirect = () => {
     return (
       <h1>
         {" "}
-        Go to <a href="gmail.com">{emailVerify}</a> to verify your account
+        Go to <a href="https://gmail.com/">{emailVerify}</a> to verify your
+        account
       </h1>
     );
   } else {
@@ -21,8 +22,8 @@ const MailRedirect = () => {
       return (
         <h1>
           {" "}
-          Go to <a href="gmail.com">{emailRecovery}</a> to recovery your
-          password
+          Go to <a href="https://gmail.com/">{emailRecovery}</a> to recovery
+          your password
         </h1>
       );
     }

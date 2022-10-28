@@ -4,19 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Dispatch } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../redux/authSlice";
+import { loginSuccess } from "@/redux/authSlice";
 import { access } from "fs";
-import { selectAuth } from "../../redux/store";
-import { loginUserWithGoogle } from "../../redux/apiRequest";
+import { selectAuth } from "@/redux/store";
+import { loginUserWithGoogle } from "@/apiRequests/loginRequest";
 
 export default function GoogleCallBack() {
-  const [cookies, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let urlParam = new URLSearchParams(window.location.search);
 
   useEffect(() => {
-    let token = urlParam.get("token") ? urlParam.get("token") : "12";
+    let token = urlParam.get("token") ? urlParam.get("token") : "";
     console.log(token);
     loginUserWithGoogle(token, dispatch, navigate);
   }, []);

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
 import {
   Button,
   Form,
@@ -10,10 +9,10 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { forgotPasswords } from "../../redux/apiRequest";
 import yup from "../../Utils/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { forgotPasswords } from "@/apiRequests/forgotRequest";
 
 interface IFormInput {
   usernameOrEmail: string;
@@ -50,11 +49,7 @@ const ForgotPassword: React.FC = () => {
   const onSubmit: SubmitHandler<IFormInput> = async (data: IFormInput) => {
     console.log("data form ", data);
 
-    toast.promise(forgotPasswords(data.usernameOrEmail, dispatch, navigate), {
-      pending: "Pending",
-      success: "Success",
-      error: "Error",
-    });
+    forgotPasswords(data.usernameOrEmail, dispatch, navigate);
   };
   return (
     <>
@@ -66,12 +61,15 @@ const ForgotPassword: React.FC = () => {
             placeholder="Username or Email"
             {...register("usernameOrEmail")}
           ></FormControl>
-          <Button type="submit">Submit</Button>
+          {errors.usernameOrEmail && (
+            <Form.Text className="fw-bold text-uppercase text-danger">
+              {" "}
+              {errors?.usernameOrEmail?.message}
+            </Form.Text>
+          )}
         </FormGroup>
+        <Button type="submit">Submit</Button>
       </Form>
-      <div>
-        <ToastContainer></ToastContainer>
-      </div>
     </>
   );
 };

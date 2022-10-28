@@ -1,13 +1,12 @@
 import { Button, Form } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
-import yup from "../../Utils/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { changPassword, getUserByToken } from "../../redux/apiRequest";
-import { toast } from "react-toastify";
+import { changPassword, getUserByToken } from "@/apiRequests/forgotRequest";
+import { formSchema } from "./yupSchema";
 
 interface IFormInput {
   usernameOrEmail: string;
@@ -20,7 +19,6 @@ const ChangePasswordForm = () => {
   const dispatch = useDispatch();
   let user = useSelector(selectUser).forgotPassword;
   let email = user.email;
-  let token = user?.token;
 
   let urlParam = new URLSearchParams(window.location.search);
 
@@ -33,26 +31,6 @@ const ChangePasswordForm = () => {
       navigate("/login");
     }
   }, []);
-
-  const formSchema = yup.object().shape({
-    password: yup
-      .string()
-      .required("Password is required")
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-        "Password must minimum 4 characters, at least 1 letter and 1 number",
-      )
-      .max(16, " Password length cannot exceed more than 16 characters"),
-    rePassword: yup
-      .string()
-      .required("Re-Password is required")
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-        "Password must minimum 4 characters, at least 1 letter and 1 number",
-      )
-      .max(16, "Password length cannot exceed more than 16 characters")
-      .oneOf([yup.ref("password")], "Password do not match"),
-  });
 
   const {
     register,
@@ -73,11 +51,7 @@ const ChangePasswordForm = () => {
       token: tokenFromEmail,
     };
     console.log("data request: ", request);
-    toast.promise(changPassword(request, dispatch, navigate), {
-      pending: "Pending",
-      success: "Success",
-      error: "Error",
-    });
+    changPassword(request, dispatch, navigate);
   };
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

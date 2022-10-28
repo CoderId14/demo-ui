@@ -1,17 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { forgotPasswords } from "./apiRequest";
+import { ResponseGetEmail, ResponseGetMailToken } from "../types/mail.type";
+import { forgotPasswords } from "../apiRequests/forgotRequest";
 
 interface forgotPasswordInitialState {
   email: string | null;
   token: string | null;
   message?: string;
   error: boolean;
-}
-
-interface sendMailRecoveryPayload {
-  email: string;
-  token: string;
+  isFetching: boolean;
 }
 
 const forgotPasswordInitialState: forgotPasswordInitialState = {
@@ -19,6 +16,7 @@ const forgotPasswordInitialState: forgotPasswordInitialState = {
   token: null,
   message: "",
   error: false,
+  isFetching: false,
 };
 
 const userSlice = createSlice({
@@ -27,27 +25,64 @@ const userSlice = createSlice({
     forgotPassword: forgotPasswordInitialState,
   },
   reducers: {
-    setEmail: (state: any, action: PayloadAction<string>) => {
-      state.forgotPassword.email = action.payload;
+    setEmail: (state: any, action: PayloadAction<ResponseGetEmail>) => {
+      state.forgotPassword.email = action.payload.responseData;
+    },
+    setEmailFailed: (state: any) => {
+      state.forgotPassword.email = null;
     },
 
-    sendMailRecovery: (
-      state: any,
-      action: PayloadAction<sendMailRecoveryPayload>,
-    ) => {
-      state.forgotPassword.email = action.payload.email;
-      state.forgotPassword.token = action.payload.token;
-      state.forgotPassword.error = false;
+    sendMailRecoveryStart: (state: any) => {
+      state.forgotPassword.isFetching = true;
     },
-    afterChangePassword: (state: any) => {
+    sendMailRecoverySuccess: (
+      state: any,
+      action: PayloadAction<ResponseGetMailToken>,
+    ) => {
+      state.forgotPassword.email = action.payload.responseData.email;
+      state.forgotPassword.token = action.payload.responseData.token;
+      state.forgotPasswords.message = action.payload.message;
+      state.forgotPassword.error = false;
+      state.forgotPassword.isFetching = false;
+    },
+    sendMailRecoveryFailed: (state: any, action: PayloadAction<string>) => {
+      state.forgotPassword.email = "";
+      state.forgotPassword.token = "";
+      state.forgotPasswords.message = action.payload;
+      state.forgotPassword.error = false;
+      state.forgotPassword.isFetching = false;
+    },
+    changePasswordStart: (state: any) => {
+      state.forgotPasswords.isFetching = true;
+    },
+    changePasswordSuccess: (state: any) => {
       state.forgotPassword.email = null;
       state.forgotPassword.token = null;
       state.forgotPassword.error = false;
+      state.forgotPasswords.isFetching = false;
+    },
+    changePasswordFailed: (state: any) => {
+      state.forgotPassword.error = true;
+    },
+    clearStateForgotPassword: (state: any) => {
+      state.forgotPassword.email = null;
+      state.forgotPassword.token = null;
+      state.forgotPassword.error = false;
+      state.forgotPasswords.isFetching = false;
     },
   },
 });
 
-export const { setEmail, sendMailRecovery, afterChangePassword } =
-  userSlice.actions;
+export const {
+  setEmail,
+  sendMailRecoverySuccess,
+  sendMailRecoveryStart,
+  sendMailRecoveryFailed,
+  changePasswordStart,
+  changePasswordFailed,
+  changePasswordSuccess,
+  clearStateForgotPassword,
+  setEmailFailed,
+} = userSlice.actions;
 
 export default userSlice.reducer;
