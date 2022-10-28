@@ -1,6 +1,7 @@
 import { Dispatch } from "react";
 import { NavigateFunction } from "react-router-dom";
 import { AnyAction } from "redux";
+import jwtDecode from "jwt-decode";
 import {
   loginFailed,
   loginGoogleSuccess,
@@ -8,22 +9,12 @@ import {
   loginSuccess,
 } from "../redux/authSlice";
 import axiosInstance from "../config/axios";
-import { LOGIN_URL } from "../constants";
-import {
-  LOGIN_FAILED_400,
-  LOGIN_FAILED_401,
-  LOGIN_FAILED_SERVER,
-} from "../constants/index";
-import { toast } from "react-toastify";
 
-interface ResponseLogin {
-  status: string;
-  message: string;
-  responseData: {
-    accessToken: string;
-    username: string;
-  };
-}
+import { toast } from "react-toastify";
+import { Longest } from "reselect/es/types";
+import { AppConst } from "@/app-const";
+import { JwtInfo, ResponseLogin } from "@/types/auth.type";
+
 export const loginUser = async (
   payload: { username: string; password: string },
   dispatch: Dispatch<AnyAction>,
@@ -32,24 +23,31 @@ export const loginUser = async (
   dispatch(loginStart());
   try {
     console.log("login started ");
-    const res = await axiosInstance.post<ResponseLogin>(LOGIN_URL, payload);
+    const res = await axiosInstance.post<ResponseLogin>("/auth/login", payload);
+    const dataJwt: JwtInfo = jwtDecode(res.data.responseData.accessToken);
 
+    const data = {
+      ...dataJwt,
+      accessToken: res.data.responseData.accessToken,
+    };
+    console.log("jwt decode: ", data);
     // Data luu vao store
-    dispatch(loginSuccess(res.data));
+    dispatch(loginSuccess(data));
+    if (dataJwt.roles.includes("ROLE_ADMIN")) {
+      navigate(AppConst.HOME_ADMIN_URL);
+    } else {
+      navigate(AppConst.HOME_URL);
+    }
 
-    navigate("/");
     toast.success(res.data.message);
   } catch (error: any) {
     if (error.response) {
       if (error.response.status === 400) {
         console.log("before loginFailed");
-        dispatch(loginFailed(LOGIN_FAILED_400));
-        toast.error(LOGIN_FAILED_400);
+        dispatch(loginFailed(AppConst.LOGIN_FAILED_400));
       } else if (error.response.status === 401) {
         console.log("before loginFailed");
-
-        dispatch(loginFailed(LOGIN_FAILED_401));
-        toast.error(LOGIN_FAILED_401);
+        dispatch(loginFailed(AppConst.LOGIN_FAILED_401));
         // Account is not active
       } else if (error.response.status === 406) {
         dispatch(loginFailed(error.response.data.message));
@@ -82,7 +80,7 @@ export const loginUserWithGoogle = async (
         accessToken: accessToken,
       }),
     );
-    navigate("/");
+    navigate(AppConst.HOME_URL);
     return res;
   } catch (error) {
     dispatch(loginFailed);

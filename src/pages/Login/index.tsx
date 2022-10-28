@@ -7,7 +7,7 @@ import { selectAuth } from "@/redux/store";
 import { SubmitHandler } from "react-hook-form";
 import { loginUser } from "@/apiRequests/loginRequest";
 import { formSchema } from "./yupSchema";
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Checkbox, Form, Input, Typography } from "antd";
 
 import Title from "antd/lib/typography/Title";
 import { GooglePlusOutlined } from "@ant-design/icons";
@@ -93,7 +93,13 @@ function Login() {
         <Form.Item name="password" rules={[yupSync]}>
           <Input.Password placeholder="Password"></Input.Password>
         </Form.Item>
-
+        <Form.Item
+          name="remember"
+          valuePropName="checked"
+          wrapperCol={{ offset: 8, span: 16 }}
+        >
+          <Checkbox>Remember</Checkbox>
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" block loading={isFetching}>
             Login

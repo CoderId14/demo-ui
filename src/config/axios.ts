@@ -1,3 +1,4 @@
+import { API_HOST_NAME } from "@/environments";
 import { EnhancedStore } from "@reduxjs/toolkit";
 import axios, { AxiosInstance } from "axios";
 import { useSelector } from "react-redux";
@@ -10,7 +11,7 @@ export const injectStore = (_store: any) => {
 };
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api/",
+  baseURL: API_HOST_NAME,
   // timeout: 2000,
   headers: {
     "content-type": "application/json",

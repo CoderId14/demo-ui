@@ -9,6 +9,49 @@ import { Dispatch } from "redux";
 import axiosInstance from "@/config/axios";
 import { ResponseRegister, UserDto } from "@/types/user.type";
 import { AxiosError } from "axios";
+import {
+  emailCheckFail,
+  emailCheckStart,
+  emailCheckSuccess,
+  usernameCheckFail,
+  usernameCheckStart,
+  usernameCheckSuccess,
+} from "@/redux/checkSlice";
+
+export const isEmailExist = async (
+  email: string,
+  dispatch: Dispatch,
+  navigate: NavigateFunction,
+) => {
+  dispatch(emailCheckStart());
+  console.log("registerStart");
+  try {
+    const res = await axiosInstance.post("auth/register/email", {
+      email: email,
+    });
+    console.log(res);
+    console.log("count");
+    if (res.data) dispatch(emailCheckFail("email already exists"));
+    else dispatch(emailCheckSuccess());
+  } catch (e) {}
+};
+export const isUsernameExist = async (
+  username: string,
+  dispatch: Dispatch,
+  navigate: NavigateFunction,
+) => {
+  dispatch(usernameCheckStart());
+  console.log("registerStart");
+  try {
+    const res = await axiosInstance.post("auth/register/username", {
+      username: username,
+    });
+    console.log(res);
+    console.log("count");
+    if (res.data) dispatch(usernameCheckFail("username already exists"));
+    else dispatch(usernameCheckSuccess());
+  } catch (e) {}
+};
 
 interface UserRegister {
   username: string;

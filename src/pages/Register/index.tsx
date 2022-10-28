@@ -3,12 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { registerUser } from "@/apiRequests/registerRequest";
+import debounce from "lodash.debounce";
 import { formSchema } from "./yupSchema";
-
 import classNames from "classnames/bind";
 import styles from "./Register.module.scss";
 import { Button, Form, Input, Typography } from "antd";
-import { selectAuth } from "../../redux/store";
+import { selectAuth, selectCheck } from "../../redux/store";
+import { useEffect } from "react";
+import {
+  isUsernameExist,
+  isEmailExist,
+} from "../../apiRequests/registerRequest";
 let cx = classNames.bind(styles);
 
 interface IFormInput {
@@ -22,22 +27,21 @@ function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let isFetching = useSelector(selectAuth).register.isFetching;
+  const register = useSelector(selectAuth).register;
+  const checkUsername = useSelector(selectCheck).username;
+  const checkEmail = useSelector(selectCheck).email;
+
+  let isFetchingUsername = checkUsername.isFetching;
+  let isFetchingEmail = checkEmail.isFetching;
+  let isFetching = register.isFetching;
+
+  let error = register.error;
 
   const [form] = Form.useForm();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<IFormInput>({
-    mode: "onChange",
-    resolver: yupResolver(formSchema),
-  });
-
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log("data from form: ", data);
+    console.log("test ", form.getFieldValue("username"));
     const { username, password, email } = data;
     const request = {
       username: username,
@@ -49,9 +53,49 @@ function Register() {
   };
   const yupSync = {
     async validator({ field }: any, value: any) {
-      await formSchema.validateSyncAt(field, { [field]: value });
+      formSchema.validateSyncAt(field, { [field]: value });
     },
   };
+
+  const checkUsernameExist = async () => {
+    let username: string = form.getFieldValue("username");
+    if (
+      username.length >= 4 &&
+      username.match(
+        /^(?=.{4,50}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+      )
+    )
+      isUsernameExist(username, dispatch, navigate);
+  };
+  const checkEmailExist = async () => {
+    let email: string = form.getFieldValue("email");
+    if (email.length >= 4 && email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+      isEmailExist(email, dispatch, navigate);
+  };
+
+  const debounceOnChangeUsername = debounce(checkUsernameExist, 700);
+  const debounceOnChangeEmail = debounce(checkEmailExist, 700);
+  console.log("refresh");
+  useEffect(() => {
+    if (checkUsername.error) {
+      form.setFields([
+        {
+          name: "username",
+          errors: [checkUsername.message],
+        },
+      ]);
+    }
+  }, [isFetchingUsername]);
+  useEffect(() => {
+    if (checkEmail.error) {
+      form.setFields([
+        {
+          name: "email",
+          errors: [checkEmail.message],
+        },
+      ]);
+    }
+  }, [isFetchingEmail]);
   return (
     <section className={cx("container")}>
       <Form
@@ -63,33 +107,57 @@ function Register() {
         initialValues={{ remember: true }}
         autoComplete="off"
       >
-        <Form.Item name="usernameOrEmail" rules={[yupSync]}>
-          <Input placeholder="Username"></Input>
+        <Form.Item name="username" rules={[yupSync]}>
+          <Input
+            onChange={debounceOnChangeUsername}
+            placeholder="Username"
+          ></Input>
         </Form.Item>
 
         <Form.Item name="password" rules={[yupSync]}>
           <Input.Password placeholder="Password"></Input.Password>
         </Form.Item>
 
+        <Form.Item
+          name="rePassword"
+          rules={[
+            {
+              required: true,
+              message: "Please confirm your password!",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The two passwords that you entered do not match!"),
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password placeholder="Re Password"></Input.Password>
+        </Form.Item>
+
+        <Form.Item name="email" rules={[yupSync]}>
+          <Input placeholder="Email" onChange={debounceOnChangeEmail}></Input>
+        </Form.Item>
+
         <Form.Item>
           <Button type="primary" htmlType="submit" block loading={isFetching}>
-            Login
+            Register
           </Button>
         </Form.Item>
         <Form.Item className={cx("extras")}>
           <div className={cx("center-items")}>
             <div>
               <Typography.Text type="secondary">
-                Need an Account?
+                Already have an Account?
               </Typography.Text>
 
-              <Link to="/register" className="text">
-                Register
-              </Link>
-            </div>
-            <div>
-              <Link to="/forgot" className="text">
-                Forgot Password
+              <Link to="/login" className="text">
+                Login
               </Link>
             </div>
           </div>

@@ -6,7 +6,7 @@ export const formSchema = yup.object().shape({
     .required("Username is required")
     .matches(
       /^(?=.{4,50}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-      "Username must minimum 4 characters and dont contain special characters",
+      "Username must minimum 4 characters and don't contain special characters",
     )
     .max(50, " Username length cannot exceed more than 50 characters"),
   email: yup
@@ -19,16 +19,17 @@ export const formSchema = yup.object().shape({
     .required("Password is required")
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-      "Password must minimum 4 characters, at least 1 letter and 1 number",
+      "Password must minimum 4 characters, at least 1 letter and 1 number and don't contain special characters",
     )
-    .max(50, " Password length cannot exceed more than 16 characters"),
+    .max(50, " Password length cannot exceed more than 50 characters"),
   rePassword: yup
     .string()
-    .required("Re-Password is required")
+
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-      "Password must minimum 4 characters, at least 1 letter and 1 number",
+      "Password must minimum 4 characters, at least 1 letter and 1 number and don't contain special characters",
     )
-    .max(50, "Password length cannot exceed more than 16 characters")
-    .oneOf([yup.ref("password")], "Password do not match"),
+    .max(50, "Password length cannot exceed more than 50 characters")
+    .oneOf([yup.ref("password")], "Password do not match")
+    .required("Re-Password is required"),
 });

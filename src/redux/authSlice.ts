@@ -2,76 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { access } from "fs";
 import { ResponseRegister } from "@/types/user.type";
-
-interface UserLogin {
-  username: string;
-  password: string;
-  accessToken?: string;
-}
-
-interface User {
-  username: string;
-  accessToken?: string;
-}
-
-interface UserGoogleLoginSliceState {
-  accessToken: string | undefined;
-  isFetching: boolean;
-  error: boolean;
-  message: string;
-}
-const loginGoogleInitialState: UserGoogleLoginSliceState = {
-  accessToken: undefined,
-  isFetching: false,
-  error: false,
-  message: "",
-};
-
-interface UserRegister {
-  username: string;
-  password: string;
-  email: string;
-}
-
-interface UserLoginSliceState {
-  user: User | undefined;
-  isFetching: boolean;
-  error: boolean;
-  message: string;
-}
-
-interface UserRegisterSliceState {
-  user: { email: string; username: string };
-  isFetching: boolean;
-  error: boolean;
-  success: boolean;
-  message: string;
-}
-interface UserLogoutSliceState {
-  isFetching: boolean;
-  error: boolean;
-  success: boolean;
-}
-
-const loginInitialState: UserLoginSliceState = {
-  user: undefined,
-  isFetching: false,
-  error: false,
-  message: "",
-};
-
-const registerInitialState: UserRegisterSliceState = {
-  user: { email: "", username: "" },
-  isFetching: false,
-  error: false,
-  success: false,
-  message: "",
-};
-const logoutInitialState: UserLogoutSliceState = {
-  isFetching: false,
-  error: false,
-  success: false,
-};
+import {
+  loginInitialState,
+  registerInitialState,
+  logoutInitialState,
+  loginGoogleInitialState,
+  DataLogin,
+} from "@/types/auth.type";
 
 const authSlice = createSlice({
   name: "auth",
@@ -85,12 +22,16 @@ const authSlice = createSlice({
     loginStart: (state: any) => {
       state.login.isFetching = true;
     },
-    loginSuccess: (state: any, action) => {
+    loginSuccess: (state: any, action: PayloadAction<DataLogin>) => {
       console.log("action: " + JSON.stringify(action.payload));
       state.login.isFetching = false;
-      state.login.user = action.payload.responseData;
+      state.login.user = {
+        username: action.payload.sub,
+        accessToken: action.payload.accessToken,
+        roles: action.payload.roles,
+      };
       state.login.error = false;
-      state.login.message = action.payload.message;
+      state.login.message = "Login successfully";
     },
     loginGoogleSuccess: (state: any, action) => {
       console.log("action google login: " + JSON.stringify(action.payload));
@@ -98,6 +39,7 @@ const authSlice = createSlice({
       state.login.user = {
         username: action.payload.responseData,
         accessToken: action.payload.accessToken,
+        roles: "ROLE_USER",
       };
       state.login.error = false;
       state.login.message = action.payload.message;
@@ -137,6 +79,7 @@ const authSlice = createSlice({
       state.logout.isFetching = false;
       state.logout.error = false;
       state.login.user = null;
+      state.login.message = null;
       state.logout.message = action.payload;
     },
     logoutFailed: (state: any, action: PayloadAction<string>) => {

@@ -5,7 +5,7 @@ import { logOut } from "@/apiRequests/logoutRequest";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-import { Menu } from "antd";
+import { Avatar, Menu, MenuProps } from "antd";
 import {
   SettingOutlined,
   HomeOutlined,
@@ -13,12 +13,21 @@ import {
   LogoutOutlined,
   UserAddOutlined,
   UserOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 
 import classNames from "classnames/bind";
 import styles from "./Nav.module.scss";
+import { AppConst } from "@/app-const";
+
+import { forEachChild } from "typescript";
+import MenuItem from "antd/lib/menu/MenuItem";
 let cx = classNames.bind(styles);
-export const NavbarMain = () => {
+
+interface Props {
+  isHiddenHomeLogo?: boolean;
+}
+export const NavbarMain = (props: Props) => {
   const login = useSelector(selectAuth).login;
   const user = login?.user ? login.user : null;
   const accessToken = user?.accessToken ? user.accessToken : "";
@@ -41,8 +50,73 @@ export const NavbarMain = () => {
   //     }
   //   }, []);
   // }
+  type MenuItem = Required<MenuProps>["items"][number];
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+    type?: "group",
+  ): MenuItem {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    } as MenuItem;
+  }
+  const menuItems = [
+    getItem("Bang Xep Hang", "5", <UploadOutlined />, [
+      getItem("BXH tay dua", "8"),
+    ]),
+    {
+      key: "4",
+      icon: <UploadOutlined />,
+      label: "Bảng Xếp Hạng",
+      children: [
+        {
+          key: "9",
+          label: (
+            <NavLink to={AppConst.RACER_RANKING_URL}>BXH Tay Đua </NavLink>
+          ),
+        },
+      ],
+    },
+    getItem(
+      <NavLink to="/">Home</NavLink>,
+      "13",
+      <HomeOutlined className={cx("iconSizeMedium")} />,
+    ),
+    getItem(
+      "User Profile",
+      "10",
+      <Avatar icon={<UserOutlined className={cx("iconSizeMedium")} />} />,
+      [
+        getItem(
+          <NavLink to="/" onClick={handleLogout}>
+            Logout
+          </NavLink>,
+          "11",
+          <LogoutOutlined className={cx("iconSizeMedium")} />,
+        ),
+        getItem(
+          <NavLink to={AppConst.LOGIN_URL}>Login</NavLink>,
+          "12",
+          <LoginOutlined className={cx("iconSizeMedium")} />,
+        ),
+      ],
+    ),
+  ];
 
+  console.log("menu items: " + menuItems);
   return (
+    // <Menu
+    //   className={cx("container")}
+    //   mode="horizontal"
+    //   defaultSelectedKeys={["home"]}
+    //   items={menuItems}
+    // ></Menu>
     <Menu
       className={cx("container")}
       mode="horizontal"
@@ -50,14 +124,34 @@ export const NavbarMain = () => {
     >
       <Menu.Item
         key="home"
-        icon={<HomeOutlined className={cx("iconSizeLarge")} />}
+        icon={<HomeOutlined className={cx("iconSizeMedium")} />}
+        hidden={props.isHiddenHomeLogo}
       >
         <NavLink to="/">Home</NavLink>
       </Menu.Item>
+      {!user?.roles.includes("ROLE_ADMIN") && (
+        <Menu.SubMenu
+          key="bxh"
+          title="Bang Xep Hang"
+          icon={<UploadOutlined className={cx("iconSizeMedium")} />}
+        >
+          <Menu.Item
+            key="bxh tay dua"
+            icon={<UploadOutlined className={cx("iconSizeMedium")} />}
+          >
+            <NavLink to={AppConst.RACER_RANKING_URL}>BXH Tay Dua</NavLink>
+          </Menu.Item>
+        </Menu.SubMenu>
+      )}
+
       <Menu.SubMenu
         key="authSubMenu"
         title="User Profile"
-        icon={<UserOutlined className={cx("iconSizeLarge")} />}
+        icon={
+          <Avatar>
+            <UserOutlined className={cx("iconSizeMedium")} />
+          </Avatar>
+        }
         className={cx("right-style")}
       >
         {!user && (
@@ -65,7 +159,7 @@ export const NavbarMain = () => {
             key="login"
             icon={<LoginOutlined className={cx("iconSizeMedium")} />}
           >
-            <NavLink to="/login">Login</NavLink>
+            <NavLink to={AppConst.LOGIN_URL}> Login </NavLink>
           </Menu.Item>
         )}
         {user && (
@@ -87,31 +181,5 @@ export const NavbarMain = () => {
         </Menu.Item>
       </Menu.SubMenu>
     </Menu>
-    // <Navbar bg="light" expand="lg">
-    //   <Container>
-    //     <Navbar.Brand as={Link} to="/">
-    //       Home
-    //     </Navbar.Brand>
-    //     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    //     <Navbar.Collapse id="basic-navbar-nav">
-    //       <Nav className="me-auto">
-    //         {!user && (
-    //           <Nav.Link as={Link} to="/login">
-    //             Login
-    //           </Nav.Link>
-    //         )}
-
-    //         <Nav.Link as={Link} to="/register">
-    //           Register
-    //         </Nav.Link>
-    //         {user && (
-    //           <Nav.Link as={Link} to="/" onClick={handleLogout}>
-    //             Logout
-    //           </Nav.Link>
-    //         )}
-    //       </Nav>
-    //     </Navbar.Collapse>
-    //   </Container>
-    // </Navbar>
   );
 };

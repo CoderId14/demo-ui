@@ -1,22 +1,31 @@
 import ChangePasswordForm from "@/components/change_password";
-import ForgotPassword from "@/components/forgot_password";
-import Home from "@/components/Home";
+import ForgotPassword from "@/pages/ForgotPassword";
+import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import MailRedirect from "@/components/mail_send";
 import GoogleCallBack from "@/components/oauth_callback";
 import Register from "@/pages/Register";
 import RegisterCallback from "@/components/register/register_callback";
+import { AppConst } from "@/app-const";
+import RacerManage from "@/pages/f1/RacerManage";
+import RacerRanking from "@/pages/f1/Ranking/RacerRanking";
+import ErrorPage from "@/components/ErrorPage";
+import ErrorPage403 from "@/components/ErrorPage/Page_403";
 
 const publicRoutes = [
-  { path: "/login", component: Login },
-  { path: "/register", component: Register },
-  { path: "/verify", component: MailRedirect },
-  { path: "/oauth2/callback", component: GoogleCallBack },
-  { path: "/forgot", component: ForgotPassword },
-  { path: "/change-password", component: ChangePasswordForm },
-  { path: "/register/callback", component: RegisterCallback },
+  { path: AppConst.LOGIN_URL, component: Login },
+  { path: AppConst.REGISTER_URL, component: Register },
+  { path: AppConst.VERIFY_URL, component: MailRedirect },
+  { path: AppConst.OAUTH2_CALLBACK_URL, component: GoogleCallBack },
+  { path: AppConst.FORGOT_PASSWORD_URL, component: ForgotPassword },
+  { path: AppConst.CHANGE_PASSWORD_URL, component: ChangePasswordForm },
+  { path: AppConst.REGISTER_CALLBACK_URL, component: RegisterCallback },
+  { path: AppConst.ERROR_PAGE_403, component: ErrorPage403 },
+  { path: AppConst.RACER_RANKING_URL, component: RacerRanking },
+  { path: "*", component: ErrorPage },
 ];
 
-const privateRoutes = [{ path: "/", component: Home }];
+const privateRoutes = [{ path: AppConst.HOME_URL, component: Home }];
 
-export { publicRoutes, privateRoutes };
+const adminRoutes = [{ path: AppConst.HOME_ADMIN_URL, component: RacerManage }];
+export { publicRoutes, privateRoutes, adminRoutes };
