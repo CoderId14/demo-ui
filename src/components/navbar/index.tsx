@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 import { Avatar, Menu, MenuProps } from "antd";
 import {
-  SettingOutlined,
   HomeOutlined,
   LoginOutlined,
   LogoutOutlined,
@@ -20,8 +19,6 @@ import classNames from "classnames/bind";
 import styles from "./Nav.module.scss";
 import { AppConst } from "@/app-const";
 
-import { forEachChild } from "typescript";
-import MenuItem from "antd/lib/menu/MenuItem";
 let cx = classNames.bind(styles);
 
 interface Props {

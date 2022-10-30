@@ -1,4 +1,7 @@
+import { Key } from "react";
+
 export interface RacerItem {
+  key: Key;
   id: number | string;
   name: string;
   dateOfBirth: string;
@@ -14,6 +17,7 @@ export interface AddItem {
 
 export interface IRacerRanking {
   key: React.Key;
+  id?: number;
   ranking: number;
   name: string;
   raceTeam: string;

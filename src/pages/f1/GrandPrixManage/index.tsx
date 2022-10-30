@@ -1,25 +1,23 @@
-import { Button, Popconfirm, Spin, Table, TableProps } from "antd";
-import { useState } from "react";
+import axiosInstance from "@/config/axios";
+import { Button, Form, Popconfirm, Table, TableProps } from "antd";
+import { useState, useEffect } from "react";
 import { EditableCell } from "./editableCells";
 
 import classNames from "classnames/bind";
-import styles from "./racerManage.module.scss";
-import { RacerItem } from "@/types/racer.type";
+import styles from "./grandPrix.module.scss";
+
+import { deleteRacer } from "../../../apiRequests/f1/racerRequest";
+import apiErrorDefaultsHandler from "@/Utils/apiErrorDefaultHandler";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import {
-  useAddRacer,
-  useDeleteRacer,
-  useFetchRacers,
-  useUpdateRacers,
-} from "@/services/f1/racerService";
+import { IGrandPrix } from "@/types/grandPrix.type";
 let cx = classNames.bind(styles);
 
-const onChange: TableProps<RacerItem>["onChange"] = (
+const onChange: TableProps<IGrandPrix>["onChange"] = (
   pagination,
   filters,
   sorter,
@@ -28,24 +26,23 @@ const onChange: TableProps<RacerItem>["onChange"] = (
   console.log("params", pagination, filters, sorter, extra);
 };
 
-const originData: RacerItem[] = [];
-const test: RacerItem | undefined = {
-  key: "",
-  id: "",
+const originData: IGrandPrix[] = [];
+const test: IGrandPrix | undefined = {
   name: "",
-  dateOfBirth: "",
-  national: "",
-  bio: "",
+  laps: 0,
+  time: "",
+  description: "",
+  raceCourse: "Ha Noi Stadium",
+
+  key: "",
 };
-function RacerManage() {
-  const { data, status } = useFetchRacers();
-  const updateRacer = useUpdateRacers();
-  const deleteRacer = useDeleteRacer();
-  const addRacer = useAddRacer();
+function GrandPrixManage() {
+  const [form] = Form.useForm();
+  const [data, setData] = useState(originData);
   const [editingKey, setEditingKey]: any = useState("");
 
-  const isEditing = (record: RacerItem) => record.id === editingKey;
-
+  const isEditing = (record: IGrandPrix) => record.key === editingKey;
+  const [count, setCount] = useState(data.length);
   const [isAdd, setAdd] = useState(false);
 
   const [currentRowValues, setCurrentRowValues] = useState(test);
@@ -54,10 +51,11 @@ function RacerManage() {
     setCurrentRowValues((old: any) => ({ ...old, [dataIndex]: value }));
   };
 
-  const edit = (record: Partial<RacerItem> & { id: React.Key }) => {
-    console.log("record id: " + record.id);
-    setCurrentRowValues(data.find((item: any) => item.id === record.id));
-    setEditingKey(record.id);
+  const edit = (record: Partial<IGrandPrix> & { key: React.Key }) => {
+    console.log("record id: " + record.key);
+    setCurrentRowValues(data.find((item) => item.key === record.key));
+    // console.log("current row values: " + JSON.stringify(currentRowValues));
+    setEditingKey(record.key);
   };
 
   const cancel = () => {
@@ -65,15 +63,13 @@ function RacerManage() {
   };
   const columns: any = [
     {
-      title: "ID",
-      dataIndex: "id",
-      sorter: (a: any, b: any) => a.id - b.id,
-      id: true,
-      width: "5%",
-    },
-    {
       title: "Name",
       dataIndex: "name",
+      sorter: (a: any, b: any) => a.name - b.name,
+    },
+    {
+      title: "Laps",
+      dataIndex: "laps",
       filters: [
         {
           text: "Joe",
@@ -91,18 +87,18 @@ function RacerManage() {
       filterMode: "tree",
       filterSearch: true,
       onFilter: (value: string, record: any) => record.name.startsWith(value),
-      width: "15%",
+      width: "30%",
       editable: true,
     },
     {
-      title: "Date Of Birth",
-      dataIndex: "dateOfBirth",
-      sorter: (a: any, b: any) => a.dateOfBirth - b.dateOfBirth,
+      title: "Time",
+      dataIndex: "time",
+      sorter: (a: any, b: any) => a.time - b.time,
       editable: true,
     },
     {
-      title: "National",
-      dataIndex: "national",
+      title: "Description",
+      dataIndex: "description",
       filters: [
         {
           text: "London",
@@ -120,8 +116,8 @@ function RacerManage() {
       editable: true,
     },
     {
-      title: "Bio",
-      dataIndex: "bio",
+      title: "RaceCourse",
+      dataIndex: "raceCourse",
       width: "20%",
       editable: true,
       ellipsis: true,
@@ -129,17 +125,28 @@ function RacerManage() {
     {
       title: "Action",
       key: "action",
-      render: (_: any, record: RacerItem) => {
+      render: (_: any, record: IGrandPrix) => {
         const editable = isEditing(record);
-        function deleteItem(id: string | number): void {
-          deleteRacer.mutate({ id: record.id });
+        function deleteItem(key: string | number): void {
+          // deleteRacer(
+          //   "",
+          //   key,
+          //   (res: any) => {
+          //     console.log("da xoa");
+          //     setData(data.filter((item) => item.key !== record.key));
+          //     setEditingKey("");
+          //   },
+          //   (errors: any) => {
+          //     console.log(errors);
+          //   },
+          // );
         }
 
         return editable ? (
           <span>
             <CheckCircleOutlined
               style={{ marginRight: 8 }}
-              onClick={() => save(record.id)}
+              onClick={() => save(record.key)}
             >
               Save
             </CheckCircleOutlined>
@@ -150,7 +157,7 @@ function RacerManage() {
             </Popconfirm>
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => deleteItem(record.id)}
+              onConfirm={() => deleteItem(record.key)}
             >
               <DeleteOutlined>Delete</DeleteOutlined>
             </Popconfirm>
@@ -168,27 +175,51 @@ function RacerManage() {
   ];
 
   console.log("admin re render");
-  const save = async (id: React.Key) => {
+  const save = async (key: React.Key) => {
     try {
+      // const row = (await form.validateFields()) as IGrandPrix;
+
       const newData = [...data];
-      const index = newData.findIndex((item) => id === item.id);
+      const index = newData.findIndex((item) => key === item.key);
       if (isAdd) {
         const item = newData[index];
-        console.log("currentRowValues: " + currentRowValues);
-        if (currentRowValues) addRacer.mutate({ data: currentRowValues });
-
+        // console.log("row1: " + JSON.stringify(row));
+        // console.log("row2: " + JSON.stringify(row));
+        // console.log("id: " + id);
+        // if (currentRowValues) await addData(currentRowValues);
+        newData.splice(index, 1, {
+          ...item,
+          ...currentRowValues,
+        });
+        // newData.forEach((test) => {
+        //   console.log(test);
+        // });
         setAdd(false);
+        setData(newData);
         setEditingKey("");
       } else {
         if (index > -1) {
           const item = newData[index];
+          // console.log("row1: " + JSON.stringify(row));
+          // console.log("row2: " + JSON.stringify(row));
+          console.log("id: " + key);
+          console.log("item: " + JSON.stringify(item));
+          // console.log("current row: " + JSON.stringify(currentRowValues));
+          //   if (currentRowValues) await updateData(currentRowValues, id);
+          newData.splice(index, 1, {
+            ...item,
+            ...currentRowValues,
+          });
+          // newData.forEach((test) => {
+          //   console.log(test);
+          // });
+          setData(newData);
 
-          if (currentRowValues)
-            updateRacer.mutate({ id: id, data: currentRowValues });
           setEditingKey("");
           setCurrentRowValues(test);
         } else {
           if (currentRowValues) newData.push(currentRowValues);
+          setData(newData);
           setEditingKey("");
         }
       }
@@ -202,7 +233,7 @@ function RacerManage() {
     }
     return {
       ...col,
-      onCell: (record: RacerItem) => ({
+      onCell: (record: IGrandPrix) => ({
         record,
         inputType: col.dataIndex === "dateOfBirth" ? "date" : "text",
         dataIndex: col.dataIndex,
@@ -216,19 +247,22 @@ function RacerManage() {
     };
   });
   const handleAdd = () => {
-    const newData: RacerItem = {
-      key: "",
-      id: "",
-      name: `Edward King`,
-      dateOfBirth: "2001-10-14",
-      national: `Colombia`,
-      bio: "Hmm",
+    const newData: IGrandPrix = {
+      key: count,
+      name: `Edward King ${count}`,
+      laps: 0,
+      time: "",
+      description: "",
+      raceCourse: "Ha Noi Stadium",
     };
     setAdd(true);
-    addRacer.mutate({ data: newData });
+    setData([...data, newData]);
+    setCount(count + 1);
   };
 
   return (
+    // <Form form={form}>
+
     <>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
         Add a row
@@ -247,10 +281,9 @@ function RacerManage() {
         pagination={{
           onChange: cancel,
         }}
-        loading={{ indicator: <Spin></Spin>, spinning: status === "loading" }}
       />
     </>
   );
 }
 
-export default RacerManage;
+export default GrandPrixManage;

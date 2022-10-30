@@ -50,7 +50,7 @@ function AdminLayout(props: Props) {
         {
           key: "sub-2",
           label: (
-            <NavLink to={AppConst.HOME_ADMIN_URL}>Quản Lý Chặng Đua </NavLink>
+            <NavLink to={AppConst.GRAND_PRIX_URL}>Quản Lý Chặng Đua </NavLink>
           ),
         },
       ],

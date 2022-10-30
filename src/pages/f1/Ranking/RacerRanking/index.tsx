@@ -14,6 +14,7 @@ import {
   CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import { deleteRacer } from "@/apiRequests/f1/racerRequest";
 let cx = classNames.bind(styles);
@@ -74,7 +75,6 @@ function RacerRanking() {
       title: "Ranking",
       dataIndex: "ranking",
       sorter: (a: any, b: any) => a.ranking - b.ranking,
-      id: true,
     },
     {
       title: "Name",
@@ -154,142 +154,16 @@ function RacerRanking() {
       title: "Action",
       key: "action",
       render: (_: any, record: IRacerRanking) => {
-        const editable = isEditing(record);
-        function deleteItem(id: string | number): void {
-          deleteRacer(
-            "",
-            id,
-            (res: any) => {
-              console.log("da xoa");
-              setData(data.filter((item) => item.key !== record.key));
-              setEditingKey("");
-            },
-            (errors: any) => {
-              console.log(errors);
-            },
-          );
-        }
-
-        return editable ? (
-          <span>
-            <CheckCircleOutlined
-              style={{ marginRight: 8 }}
-              onClick={() => save(record.key)}
-            >
-              Save
-            </CheckCircleOutlined>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <CloseCircleOutlined style={{ marginRight: 8 }}>
-                Cancel
-              </CloseCircleOutlined>
-            </Popconfirm>
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => deleteItem(record.key)}
-            >
-              <DeleteOutlined>Delete</DeleteOutlined>
-            </Popconfirm>
-          </span>
-        ) : (
-          <EditOutlined
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            Edit
-          </EditOutlined>
+        return (
+          <EyeOutlined
+            onClick={() => console.log("key " + record.key)}
+          ></EyeOutlined>
         );
       },
     },
   ];
 
-  useEffect(() => {
-    async function fetchRacer() {
-      try {
-        let res = await axiosInstance.get("/racer");
-        res.data = normalizeDate(res.data);
-        console.log(res.data);
-        setData(res.data);
-      } catch (error: any) {
-        apiErrorDefaultsHandler(error.response.status);
-      }
-    }
-    fetchRacer();
-  }, []);
-
-  useEffect(() => {});
-  async function updateData(sendData: IRacerRanking, id: React.Key) {
-    try {
-      console.log("sendData: " + JSON.stringify(sendData));
-      let res = await axiosInstance.put("/racer/" + id, sendData);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {});
-  async function addData(sendData: IRacerRanking) {
-    try {
-      console.log("sendData: " + JSON.stringify(sendData));
-      let res = await axiosInstance.post("/racer", sendData);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
   console.log("admin re render");
-  const save = async (id: React.Key) => {
-    try {
-      // const row = (await form.validateFields()) as IRacerRanking;
-
-      const newData = [...data];
-      const index = newData.findIndex((item) => id === item.key);
-      if (isAdd) {
-        const item = newData[index];
-        // console.log("row1: " + JSON.stringify(row));
-        // console.log("row2: " + JSON.stringify(row));
-        // console.log("id: " + id);
-        if (currentRowValues) await addData(currentRowValues);
-        newData.splice(index, 1, {
-          ...item,
-          ...currentRowValues,
-        });
-        // newData.forEach((test) => {
-        //   console.log(test);
-        // });
-        setAdd(false);
-        setData(newData);
-        setEditingKey("");
-      } else {
-        if (index > -1) {
-          const item = newData[index];
-          // console.log("row1: " + JSON.stringify(row));
-          // console.log("row2: " + JSON.stringify(row));
-          console.log("id: " + id);
-          console.log("item: " + JSON.stringify(item));
-          // console.log("current row: " + JSON.stringify(currentRowValues));
-          if (currentRowValues) await updateData(currentRowValues, id);
-          newData.splice(index, 1, {
-            ...item,
-            ...currentRowValues,
-          });
-          // newData.forEach((test) => {
-          //   console.log(test);
-          // });
-          setData(newData);
-
-          setEditingKey("");
-          setCurrentRowValues(test);
-        } else {
-          if (currentRowValues) newData.push(currentRowValues);
-          setData(newData);
-          setEditingKey("");
-        }
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
   const mergedColumns = columns.map((col: any) => {
     if (!col.editable) {
       return col;
@@ -300,7 +174,6 @@ function RacerRanking() {
         record,
         inputType: col.dataIndex === "totalTimes" ? "date" : "text",
         dataIndex: col.dataIndex,
-        disabled: col.dataIndex === "ID",
         title: col.title,
         editing: isEditing(record),
         handleInputChange,
@@ -328,9 +201,6 @@ function RacerRanking() {
     // <Form form={form}>
 
     <>
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
-      </Button>
       <Table
         components={{
           body: {

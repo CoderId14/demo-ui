@@ -5,67 +5,75 @@ import { Dispatch } from "react";
 import { NavigateFunction } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AnyAction } from "redux";
+import AxiosResponse from "axios";
 
-export const getAllRacers = () => {
-  axiosInstance
-    .get("/racer", {
+export const getAllRacers = async () => {
+  try {
+    const res = await axiosInstance.get("/racer", {
       headers: {
         "content-type": "application/json",
       },
-    })
-    .then((res) => res.data)
-    .catch((err) => {
-      // catch error
-      if (err.response) {
-        if (err.response.status === 400) {
-          toast.error(AppConst.DEFAULT_MESSAGE_400);
-        } else if (err.response.status === 404) {
-          toast.error(AppConst.DEFAULT_MESSAGE_404);
-        } else if (err.response.status === 401) {
-          toast.error(AppConst.DEFAULT_MESSAGE_401);
-        }
-      }
     });
+    return res.data;
+  } catch (err: any) {
+    // catch error
+    if (err.response) {
+      if (err.response.status === 400) {
+        toast.error(AppConst.DEFAULT_MESSAGE_400);
+      } else if (err.response.status === 404) {
+        toast.error(AppConst.DEFAULT_MESSAGE_404);
+      } else if (err.response.status === 401) {
+        toast.error(AppConst.DEFAULT_MESSAGE_401);
+      }
+    }
+  }
 };
-export function deleteRacer(
-  config: any,
-  id: string | number,
-  callback: Function,
-  errorcallback: Function,
-) {
-  axiosInstance
-    .delete("/racer/" + id, config)
-    .then((res) => {
-      //do something
-      if (callback != null) {
-        callback(res);
+export async function deleteRacer(id: string | number) {
+  try {
+    const res = await axiosInstance.delete("/racer/" + id);
+    return res.data;
+  } catch (err: any) {
+    if (err.response) {
+      if (err.response.status === 400) {
+        toast.error(AppConst.DEFAULT_MESSAGE_400);
+      } else if (err.response.status === 404) {
+        toast.error(AppConst.DEFAULT_MESSAGE_404);
+      } else if (err.response.status === 401) {
+        toast.error(AppConst.DEFAULT_MESSAGE_401);
       }
-    })
-    .catch((err) => {
-      // catch error
-      if (errorcallback != null) {
-        errorcallback(err);
-      }
-    });
+    }
+  }
 }
-export function updateRacer(
-  config: any,
-  id: React.Key,
-  callback: Function,
-  errorcallback: Function,
-) {
-  axiosInstance
-    .put("/racer/" + id, config)
-    .then((res) => {
-      //do something
-      if (callback != null) {
-        callback(res);
+export async function updateRacer(id: React.Key, data: any) {
+  try {
+    console.log("data update racer: " + JSON.stringify(data));
+    const res = await axiosInstance.put("/racer/" + id, data);
+    return res.data;
+  } catch (err: any) {
+    if (err.response) {
+      if (err.response.status === 400) {
+        toast.error(AppConst.DEFAULT_MESSAGE_400);
+      } else if (err.response.status === 404) {
+        toast.error(AppConst.DEFAULT_MESSAGE_404);
+      } else if (err.response.status === 401) {
+        toast.error(AppConst.DEFAULT_MESSAGE_401);
       }
-    })
-    .catch((err) => {
-      // catch error
-      if (errorcallback != null) {
-        errorcallback(err);
+    }
+  }
+}
+export async function addRacer(data: any) {
+  try {
+    const res = await axiosInstance.post("/racer/", data);
+    return res.data;
+  } catch (err: any) {
+    if (err.response) {
+      if (err.response.status === 400) {
+        toast.error(AppConst.DEFAULT_MESSAGE_400);
+      } else if (err.response.status === 404) {
+        toast.error(AppConst.DEFAULT_MESSAGE_404);
+      } else if (err.response.status === 401) {
+        toast.error(AppConst.DEFAULT_MESSAGE_401);
       }
-    });
+    }
+  }
 }

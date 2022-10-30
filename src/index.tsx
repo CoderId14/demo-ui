@@ -7,19 +7,31 @@ import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { CookiesProvider } from "react-cookie";
 import { injectStore } from "./config/axios";
+import PreLoad from "./components/preLoad";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 // Tránh trực tiếp injectStore vào codebase file, và cũng không dùng trực tiếp hook ở file không phải components
 //  => injectStore vào interceptors
 injectStore(store);
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <CookiesProvider>
+      <PersistGate loading={<PreLoad />} persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
           <App />
-        </CookiesProvider>
+          <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
+        </QueryClientProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>,
