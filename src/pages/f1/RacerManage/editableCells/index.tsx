@@ -1,6 +1,4 @@
-import { DatePicker, Form, Input, InputNumber } from "antd";
-import moment from "moment";
-import { format } from "path";
+import { Form } from "antd";
 import { useState } from "react";
 import InputNode from "./inputNode";
 const dateFormat = "YYYY/MM/DD";
@@ -42,7 +40,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   // console.log("rowValue: " + JSON.stringify(rowValue));
 
   return (
-    <td {...restProps}>
+    <td {...restProps} key={dataIndex}>
       {editing ? (
         <Form.Item
         //   name={dataIndex}
