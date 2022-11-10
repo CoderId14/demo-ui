@@ -14,8 +14,6 @@ const InputNumber = (props: any) => {
       style={{ width: 240 }}
       value={value}
       precision={0.0}
-      decimalSeparator="."
-      step={1}
       onChange={handleInputChange}
       {...restProps}
     />

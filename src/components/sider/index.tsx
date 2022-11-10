@@ -41,7 +41,7 @@ function Sider({ collapsed, items }: Props) {
       <Menu
         theme="light"
         mode="inline"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={["sub-1"]}
         items={items}
       />
     </Layout.Sider>

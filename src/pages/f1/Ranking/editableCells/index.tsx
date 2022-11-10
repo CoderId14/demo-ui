@@ -9,9 +9,11 @@ const dateFormat = "YYYY/MM/DD";
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex:
+    | "key"
     | "ranking"
-    | "name"
-    | "raceTeam"
+    | "racerId"
+    | "racerName"
+    | "raceTeamName"
     | "national"
     | "totalPoints"
     | "totalTimes";

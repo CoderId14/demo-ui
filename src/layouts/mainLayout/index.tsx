@@ -12,7 +12,7 @@ function MainLayout(props: Props) {
     <Layout>
       <NavbarMain></NavbarMain>
       <Layout>
-        <Content>{props.children}</Content>
+        <Content style={{ padding: "0 50px" }}>{props.children}</Content>
       </Layout>
       <Footer
         style={{

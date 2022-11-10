@@ -1,32 +1,43 @@
-import axiosInstance from "@/config/axios";
-import { Button, Form, Popconfirm, Table, TableProps } from "antd";
-import { useState, useEffect } from "react";
+import {
+  Button,
+  Input,
+  Popconfirm,
+  Select,
+  Spin,
+  Table,
+  TableProps,
+} from "antd";
+import { useEffect, useState } from "react";
 import { EditableCell } from "./editableCells";
 
 import classNames from "classnames/bind";
-import styles from "./grandPrix.module.scss";
-
-import { deleteRacer } from "../../../apiRequests/f1/racerRequest";
-import apiErrorDefaultsHandler from "@/Utils/apiErrorDefaultHandler";
+import styles from "./racerManage.module.scss";
+import { RacerItem } from "@/types/racer.type";
+import { IRaceTeam } from "../../../types/raceTeam.type";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { IGrandPrix } from "@/types/grandPrix.type";
-import { useFetchGrandPrixes } from "@/services/f1/grandPrixService";
-import { useFetchGrandPrixesBySeason } from "../../../services/f1/grandPrixService";
 import {
-  useUpdateGrandPrix,
-  useDeleteGrandPrix,
-  useAddGrandPrix,
-} from "../../../services/f1/grandPrixService";
+  useAddRaceTeam,
+  useFetchRaceTeams,
+  useUpdateRaceTeam,
+} from "@/services/f1/raceTeamService";
+import {
+  useDeleteRaceTeam,
+  useFetchRaceTeamsBySeason,
+} from "../../../services/f1/raceTeamService";
+import { useFetchSeasons } from "../../../services/f1/seasonService";
+import { ISeason } from "../../../types/season.type";
 import SelectOption from "@/components/SelectOption";
-import { useFetchSeasons } from "@/services/f1/seasonService";
+import { Form } from "react-bootstrap";
+import { useQueryClient } from "@tanstack/react-query";
+
 let cx = classNames.bind(styles);
 
-const onChange: TableProps<IGrandPrix>["onChange"] = (
+const onChange: TableProps<IRaceTeam>["onChange"] = (
   pagination,
   filters,
   sorter,
@@ -35,25 +46,22 @@ const onChange: TableProps<IGrandPrix>["onChange"] = (
   console.log("params", pagination, filters, sorter, extra);
 };
 
-const originData: IGrandPrix[] = [];
-const test: IGrandPrix | undefined = {
+const originData: IRaceTeam[] = [];
+const test: IRaceTeam | undefined = {
   id: "",
-  name: "",
-  laps: 0,
-  time: "",
-  description: "",
-  raceCourse: "Ha Noi Stadium",
-
   key: "",
+  name: "",
+  powerUnit: 0,
+  description: "",
 };
-function GrandPrixManage() {
-  const { data, status } = useFetchGrandPrixes();
-  const updateGrandPrix = useUpdateGrandPrix();
-  const deleteGrandPrix = useDeleteGrandPrix();
-  const addGrandPrix = useAddGrandPrix();
-
+function RaceTeamManage() {
+  const { data, status } = useFetchRaceTeams();
+  const updateRaceTeam = useUpdateRaceTeam();
+  const deleteRaceTeam = useDeleteRaceTeam();
+  const addRaceTeam = useAddRaceTeam();
   const [editingKey, setEditingKey]: any = useState("");
-  const isEditing = (record: IGrandPrix) => record.id === editingKey;
+
+  const isEditing = (record: IRaceTeam) => record.id === editingKey;
 
   const [isAdd, setAdd] = useState(false);
 
@@ -63,10 +71,9 @@ function GrandPrixManage() {
     setCurrentRowValues((old: any) => ({ ...old, [dataIndex]: value }));
   };
 
-  const edit = (record: Partial<IGrandPrix> & { id: React.Key }) => {
+  const edit = (record: Partial<IRaceTeam> & { id: React.Key }) => {
     console.log("record id: " + record.id);
     setCurrentRowValues(data.find((item: any) => item.id === record.id));
-
     setEditingKey(record.id);
   };
 
@@ -78,10 +85,12 @@ function GrandPrixManage() {
       title: "Name",
       dataIndex: "name",
       sorter: (a: any, b: any) => a.name - b.name,
+      editable: true,
+      width: "20%",
     },
     {
-      title: "Laps",
-      dataIndex: "laps",
+      title: "PowerUnit",
+      dataIndex: "powerUnit",
       filters: [
         {
           text: "Joe",
@@ -99,52 +108,30 @@ function GrandPrixManage() {
       filterMode: "tree",
       filterSearch: true,
       onFilter: (value: string, record: any) => record.name.startsWith(value),
-      width: "30%",
-      editable: true,
-    },
-    {
-      title: "Time",
-      dataIndex: "time",
-      sorter: (a: any, b: any) => a.time - b.time,
+      width: "15%",
       editable: true,
     },
     {
       title: "Description",
       dataIndex: "description",
-      filters: [
-        {
-          text: "London",
-          value: "London",
-        },
-        {
-          text: "New York",
-          value: "New York",
-        },
-      ],
-      onFilter: (value: string, record: any) =>
-        record.national.startsWith(value),
-      filterSearch: true,
-      width: "20%",
+      sorter: (a: any, b: any) => a.description - b.description,
       editable: true,
-    },
-    {
-      title: "RaceCourse",
-      dataIndex: "raceCourse",
-      width: "20%",
-      editable: true,
-      ellipsis: true,
     },
     {
       title: "Action",
       key: "action",
-      render: (_: any, record: IGrandPrix) => {
+      width: "10%",
+      render: (_: any, record: IRaceTeam) => {
         const editable = isEditing(record);
+        function deleteItem(id: string | number): void {
+          deleteRaceTeam.mutate({ id: record.id });
+        }
 
         return editable ? (
           <span>
             <CheckCircleOutlined
               style={{ marginRight: 8 }}
-              onClick={() => save(record.key)}
+              onClick={() => save(record.id)}
             >
               Save
             </CheckCircleOutlined>
@@ -155,7 +142,7 @@ function GrandPrixManage() {
             </Popconfirm>
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => deleteGrandPrix.mutate(record.id)}
+              onConfirm={() => deleteItem(record.id)}
             >
               <DeleteOutlined>Delete</DeleteOutlined>
             </Popconfirm>
@@ -180,7 +167,7 @@ function GrandPrixManage() {
       if (isAdd) {
         const item = newData[index];
         console.log("currentRowValues: " + currentRowValues);
-        if (currentRowValues) addGrandPrix.mutate({ data: currentRowValues });
+        if (currentRowValues) addRaceTeam.mutate({ data: currentRowValues });
 
         setAdd(false);
         setEditingKey("");
@@ -189,7 +176,7 @@ function GrandPrixManage() {
           const item = newData[index];
 
           if (currentRowValues)
-            updateGrandPrix.mutate({ id: id, data: currentRowValues });
+            updateRaceTeam.mutate({ id: id, data: currentRowValues });
           setEditingKey("");
           setCurrentRowValues(test);
         } else {
@@ -207,11 +194,10 @@ function GrandPrixManage() {
     }
     return {
       ...col,
-      onCell: (record: IGrandPrix) => ({
+      onCell: (record: IRaceTeam) => ({
         record,
-        inputType: col.dataIndex === "time" ? "date" : "text",
+        inputType: col.dataIndex === "powerUnit" ? "number" : "text",
         dataIndex: col.dataIndex,
-        disabled: col.dataIndex === "ID",
         title: col.title,
         editing: isEditing(record),
         handleInputChange,
@@ -221,25 +207,22 @@ function GrandPrixManage() {
     };
   });
   const handleAdd = () => {
-    const newData: IGrandPrix = {
+    const newData: IRaceTeam = {
       key: "",
       id: "",
       name: `Edward King`,
-      laps: 10,
-      time: "2022-10-12T00:00:00",
-      description: "",
-      raceCourse: "Ha Noi Stadium",
-      season: "2022 ChampionShip Tour",
+      powerUnit: 1000.0,
+      description: "Colombia",
     };
     setAdd(true);
-    addGrandPrix.mutate({ data: newData });
+    addRaceTeam.mutate({ data: newData });
   };
-  const grandPrixBySeason = useFetchGrandPrixesBySeason();
-  const [selectedSeason, setSelectedSeason] = useState("");
   const { data: seasonData, status: seasonStatus } = useFetchSeasons();
+  const [selectedSeason, setSelectedSeason] = useState("");
+  const raceTeamBySeason = useFetchRaceTeamsBySeason();
+  console.log("selectedSeason: " + selectedSeason);
+  const queryClient = useQueryClient();
   return (
-    // <Form form={form}>
-
     <>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
         Add a row
@@ -248,9 +231,10 @@ function GrandPrixManage() {
         data={seasonData}
         setDataSelect={(value: any) => {
           setSelectedSeason(value);
-          grandPrixBySeason.mutate({
-            seasonId: value,
-          });
+          if (value !== "")
+            raceTeamBySeason.mutate({
+              seasonId: value,
+            });
           console.log("adfafasdf: " + data);
         }}
       ></SelectOption>
@@ -268,9 +252,10 @@ function GrandPrixManage() {
         pagination={{
           onChange: cancel,
         }}
+        loading={{ indicator: <Spin></Spin>, spinning: status === "loading" }}
       />
     </>
   );
 }
 
-export default GrandPrixManage;
+export default RaceTeamManage;

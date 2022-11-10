@@ -13,8 +13,11 @@ const InputNumber = (props: any) => {
     <AntInputNumber
       style={{ width: 240 }}
       value={value}
+      formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} // Deal with currency here. Default to $
+      parser={(value: string) => value.replace(/\$\s?|(,*)/g, "")} // What it means?
       precision={0.0}
       decimalSeparator="."
+      size="small"
       step={1}
       onChange={handleInputChange}
       {...restProps}

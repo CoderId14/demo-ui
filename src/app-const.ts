@@ -11,6 +11,10 @@ export namespace AppConst {
   export const HOME_URL: string = "/";
   export const RACER_RANKING_URL: string = "/bxh-racer";
   export const GRAND_PRIX_URL: string = "/admin/grandPrix";
+  export const RACE_TEAM_URL: string = "/admin/raceTeams";
+  export const RACER_RESULT_DETAIL_URL: string = "/result/racer/";
+  export const ADD_RACER_TO_GRAND_PRIX_URL: string =
+    "/admin/race-team/addRacer/";
 
   export const ERROR_PAGE: string = "/error";
   export const ERROR_PAGE_403: string = "/error_403";

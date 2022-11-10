@@ -53,17 +53,11 @@ function AdminLayout(props: Props) {
             <NavLink to={AppConst.GRAND_PRIX_URL}>Quản Lý Chặng Đua </NavLink>
           ),
         },
+        {
+          key: "sub-3",
+          label: <NavLink to={AppConst.RACE_TEAM_URL}>Quản Lý Đội Đua</NavLink>,
+        },
       ],
-    },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "nav 2",
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: "nav 3",
     },
     {
       key: "4",

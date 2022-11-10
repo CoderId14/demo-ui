@@ -6,6 +6,16 @@ import {
   addRacer,
 } from "../../apiRequests/f1/racerRequest";
 import { normalizeDate } from "@/pages/f1/RacerManage/utils";
+import { get } from "http";
+import {
+  getRacerRanking,
+  getRacerResultDetail,
+} from "../../apiRequests/f1/racerRequest";
+import { Key } from "react";
+import {
+  getRacer,
+  getRacerRankingBySeason,
+} from "../../apiRequests/f1/racerRequest";
 
 export function useFetchRacers() {
   const queryClient = useQueryClient();
@@ -16,6 +26,54 @@ export function useFetchRacers() {
       queryClient.setQueryData(["racers"], (old: any) => normalizeDate(old));
     },
   });
+}
+export function useFetchRacer(id: Key) {
+  const queryClient = useQueryClient();
+
+  return useQuery(["racer", { id: id }], () => getRacer(id), {
+    onSuccess: (data) => {
+      const prevData = queryClient.getQueryData(["racer"]);
+    },
+  });
+}
+export function useFetchRacerRanking() {
+  const queryClient = useQueryClient();
+
+  return useQuery(["racer-ranking"], getRacerRanking, {
+    onSuccess: (data) => {
+      const prevData = queryClient.getQueryData(["racer-ranking"]);
+    },
+  });
+}
+export function useFetchRacerRankingBySeason() {
+  const queryClient = useQueryClient();
+  return useMutation(({ seasonId }: any) => getRacerRankingBySeason(seasonId), {
+    onMutate: async (data) => {
+      await queryClient.cancelQueries(["racer-ranking"]);
+      const prevData = queryClient.getQueryData(["racer-ranking"]);
+      // console.log("data get raceteam by season: " + JSON.stringify(data));
+      // queryClient.setQueryData(["raceTeam"], (old: any) => [data]);
+      // return { prevData };
+    },
+    onError: (err, data, context) => {
+      // queryClient.setQueryData(["raceTeam"], context?.prevData);
+    },
+    onSettled: (data, error, variables, context) => {
+      // Error or success... doesn't matter!
+      console.log("data sdfsfsdf: " + JSON.stringify(data));
+      queryClient.setQueryData(["racer-ranking"], (old: any) => [...data]);
+    },
+  });
+}
+
+export function useFetchRacerResultDetail(racerId: Key, seasonId: Key) {
+  const queryClient = useQueryClient();
+
+  return useQuery(
+    ["racer-detail", { racerId, seasonId }],
+    getRacerResultDetail,
+    {},
+  );
 }
 
 export function useUpdateRacers() {

@@ -1,23 +1,17 @@
 import { Form } from "antd";
 import { useState } from "react";
 import InputNode from "./inputNode";
+import { IRaceTeam } from "../../../../types/raceTeam.type";
 const dateFormat = "YYYY/MM/DD";
-interface RacerItem {
-  id: React.Key;
-  name: string;
-  dateOfBirth: string;
-  national: string;
-  bio: string;
-}
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
-  dataIndex: "name" | "dateOfBirth" | "national" | "bio";
+  dataIndex: "name" | "powerUnit" | "description";
   title: any;
   inputType: "number" | "text" | "date";
-  record: RacerItem;
+  record: IRaceTeam;
   index: number;
-  currentRowValues: RacerItem;
+  currentRowValues: IRaceTeam;
   handleInputChange: any;
 
   children: React.ReactNode;

@@ -7,6 +7,7 @@ export interface RacerItem {
   dateOfBirth: string;
   national: string;
   bio: string;
+  racerOfTeamId?: Key;
 }
 export interface AddItem {
   name: string;
@@ -17,11 +18,21 @@ export interface AddItem {
 
 export interface IRacerRanking {
   key: React.Key;
-  id?: number;
+  racerId?: number;
   ranking: number;
-  name: string;
-  raceTeam: string;
+  racerName: string;
+  raceTeamName: string;
   national: string;
   totalPoints: number;
   totalTimes: string;
+}
+export interface IRacerResultDetails {
+  key: React.Key;
+  racerId: number;
+  racerName: string;
+  grandPrixName: string;
+  time: string;
+  finishTime: string;
+  ranking: number;
+  point: number;
 }

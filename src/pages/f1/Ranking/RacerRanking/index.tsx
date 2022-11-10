@@ -17,6 +17,12 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import { deleteRacer } from "@/apiRequests/f1/racerRequest";
+import { useFetchRacerRanking } from "@/services/f1/racerService";
+import { Navigate, useNavigate } from "react-router-dom";
+import { AppConst } from "@/app-const";
+import { useFetchRacerRankingBySeason } from "../../../../services/f1/racerService";
+import { useFetchSeasons } from "@/services/f1/seasonService";
+import SelectOption from "@/components/SelectOption";
 let cx = classNames.bind(styles);
 
 const onChange: TableProps<IRacerRanking>["onChange"] = (
@@ -29,42 +35,26 @@ const onChange: TableProps<IRacerRanking>["onChange"] = (
 };
 
 const originData: IRacerRanking[] = [];
-const test: IRacerRanking | undefined = {
+const test: IRacerRanking = {
   key: "",
-  ranking: 1,
-  name: "",
-  raceTeam: "",
+  ranking: 0,
+  racerName: "",
+  raceTeamName: "",
   national: "",
   totalPoints: 0,
-  totalTimes: "2001-10-14",
+  totalTimes: "03:00:00",
 };
 function RacerRanking() {
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
+  const { data, status } = useFetchRacerRanking();
+  const navigate = useNavigate();
   const [editingKey, setEditingKey]: any = useState("");
 
   const isEditing = (record: IRacerRanking) => record.key === editingKey;
-  const [count, setCount] = useState(data.length);
-  const [isAdd, setAdd] = useState(false);
 
   const [currentRowValues, setCurrentRowValues] = useState(test);
 
   const handleInputChange = (value: any, dataIndex: any) => {
     setCurrentRowValues((old: any) => ({ ...old, [dataIndex]: value }));
-  };
-
-  const edit = (record: Partial<IRacerRanking> & { key: React.Key }) => {
-    // form.setFieldsValue({
-    //   name: "",
-    //   dateOfBirth: moment("2000-11-11", "YYYY-MM-DD"),
-    //   national: "",
-    //   bio: "",
-    //   ...record,
-    // });
-    console.log("record id: " + record.key);
-    setCurrentRowValues(data.find((item) => item.key === record.key));
-    // console.log("current row values: " + JSON.stringify(currentRowValues));
-    setEditingKey(record.key);
   };
 
   const cancel = () => {
@@ -77,8 +67,8 @@ function RacerRanking() {
       sorter: (a: any, b: any) => a.ranking - b.ranking,
     },
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Racer Name",
+      dataIndex: "racerName",
       filters: [
         {
           text: "Joe",
@@ -101,7 +91,7 @@ function RacerRanking() {
     },
     {
       title: "RaceTeam",
-      dataIndex: "raceTeam",
+      dataIndex: "raceTeamName",
       sorter: (a: any, b: any) => a.raceTeam - b.raceTeam,
       editable: true,
     },
@@ -156,7 +146,11 @@ function RacerRanking() {
       render: (_: any, record: IRacerRanking) => {
         return (
           <EyeOutlined
-            onClick={() => console.log("key " + record.key)}
+            onClick={() => {
+              navigate(
+                AppConst.RACER_RESULT_DETAIL_URL + "?racerId=" + record.racerId,
+              );
+            }}
           ></EyeOutlined>
         );
       },
@@ -182,25 +176,24 @@ function RacerRanking() {
       }),
     };
   });
-  const handleAdd = () => {
-    const newData: IRacerRanking = {
-      key: "",
-      ranking: 1,
-      name: "",
-      raceTeam: "",
-      national: "",
-      totalPoints: 0,
-      totalTimes: "",
-    };
-    setAdd(true);
-    setData([...data, newData]);
-    setCount(count + 1);
-  };
-
+  const { data: seasonData, status: seasonStatus } = useFetchSeasons();
+  const [selectedSeason, setSelectedSeason] = useState("");
+  const racerRankingBySeason = useFetchRacerRankingBySeason();
   return (
     // <Form form={form}>
 
     <>
+      <SelectOption
+        data={seasonData}
+        setDataSelect={(value: any) => {
+          setSelectedSeason(value);
+          if (value !== "")
+            racerRankingBySeason.mutate({
+              seasonId: value,
+            });
+          console.log("adfafasdf: " + data);
+        }}
+      ></SelectOption>
       <Table
         components={{
           body: {
