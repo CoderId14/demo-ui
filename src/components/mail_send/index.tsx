@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectAuth, selectUser } from '../../redux/store'
 import { Link } from 'react-router-dom'
