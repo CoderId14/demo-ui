@@ -1,4 +1,4 @@
-import { List, Typography } from 'antd'
+import { List } from 'antd'
 import { BookDetails } from '@/types/book/book.type'
 import BookCard from '../BookCard'
 

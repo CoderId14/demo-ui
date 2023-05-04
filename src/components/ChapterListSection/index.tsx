@@ -1,17 +1,17 @@
 import { ReadOutlined, SortAscendingOutlined } from '@ant-design/icons'
 import { Divider, Space, Skeleton, List, Typography, Alert, Row, Col } from 'antd'
 import { formatDistance } from 'date-fns'
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { useFetchChapters } from '@/services/client/chapterService'
 import { Chapter } from '@/types/chapter/chapter.type'
-const { Title, Text, Paragraph } = Typography
+const { Title, Paragraph } = Typography
 interface Props {
   bookId: number
 }
 function ChapterListSection({ bookId }: Props) {
   console.log('ChapterListSection re rendered')
-  const { status, data, error, isFetching } = useFetchChapters({
+  const { data, error, isFetching } = useFetchChapters({
     book: bookId
   })
   if (isFetching) {

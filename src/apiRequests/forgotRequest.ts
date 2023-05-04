@@ -83,9 +83,7 @@ export const changPassword = async (
 
 export const sendMailForgotPassword = async (
   usernameOrEmail: string,
-  dispatch: Dispatch<AnyAction>,
-  navigate: NavigateFunction
-) => {
+  dispatch: Dispatch<AnyAction>) => {
   dispatch(sendMailRecoveryStart)
   try {
     const res = await axiosInstance.post<ResponseGetMailToken>('/user/forgot-password', {
@@ -119,7 +117,7 @@ export const forgotPasswords = async (
     })
     dispatch(setEmail(res.data))
     navigate('/verify')
-    sendMailForgotPassword(res.data.responseData, dispatch, navigate)
+    sendMailForgotPassword(res.data.responseData, dispatch)
   } catch (error: any) {
     if (error.response) {
       if (error.response.status === 400) {
