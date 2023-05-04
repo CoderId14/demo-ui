@@ -1,0 +1,23 @@
+@use "@/App";
+
+.container {
+    margin-top: 5rem;
+}
+
+.center-items{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.btn-google{
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+    
+.icon-google{
+    font-size: App.$iconSizeMedium;
+    padding-right: 0.5rem;
+}
