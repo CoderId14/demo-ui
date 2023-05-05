@@ -7,10 +7,10 @@ import { Card, Divider, Image, Row } from 'antd'
 import Title from 'antd/lib/typography/Title'
 import { useRef } from 'react'
 interface Props {
-    chapter: Chapter;
-    book: Book;
-  }
-function ChapterText({chapter, book}: Props) {
+  chapter: Chapter
+  book: Book
+}
+function ChapterText({ chapter, book }: Props) {
   const editorRef: any = useRef(null)
   const log = () => {
     if (editorRef.current) {

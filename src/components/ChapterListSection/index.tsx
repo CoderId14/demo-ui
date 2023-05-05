@@ -58,8 +58,6 @@ function ChapterListSection({ bookId }: Props) {
       </Row>
       <Divider></Divider>
       <List
-        header={<div>Header</div>}
-        footer={<div>Footer</div>}
         bordered
         dataSource={chapterData}
         renderItem={(item) => (

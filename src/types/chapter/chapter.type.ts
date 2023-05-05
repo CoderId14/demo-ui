@@ -32,17 +32,17 @@ export interface ChapterSearchParams {
 }
 
 export interface ChapterImagesSearchParams {
-  chapterId: number;
+  chapterId: number
   size?: number
   sort?: string
 }
-export interface IChapterImg{
-  id: number;
-  fileUrl: string;
-  imgNumber: number;
+export interface IChapterImg {
+  id: number
+  fileUrl: string
+  imgNumber: number
 }
 
-export interface ImgChapterList{
+export interface ImgChapterList {
   content: IChapterImg[]
   page: number
   size: number
@@ -51,6 +51,6 @@ export interface ImgChapterList{
   last: boolean
 }
 export interface ChapterImgsSearchResponse {
-  chapterId: number;
-  imgChapterList: ImgChapterList;
+  chapterId: number
+  imgChapterList: ImgChapterList
 }

@@ -9,7 +9,7 @@ import ChapterText from './ChapterText'
 import ChapterImg from './ChapterImg'
 
 function ChapterDetail() {
-  const [book, setBook] = useState<Book | undefined>();  
+  const [book, setBook] = useState<Book | undefined>()
   const { chapterId, bookId } = useParams()
 
   const { data, isFetching } = useFetchChapterDetail({
@@ -29,8 +29,8 @@ function ChapterDetail() {
     id: Number(bookId),
     detail: true
   })
-  useEffect(()=>{
-    if(books?.content){
+  useEffect(() => {
+    if (books?.content) {
       setBook(books.content[0])
     }
   }, [books])
@@ -41,15 +41,15 @@ function ChapterDetail() {
     return <Skeleton />
   }
 
-  if(book?.bookId && dataChapterImgs?.imgChapterList == null){
+  if (book?.bookId && dataChapterImgs?.imgChapterList == null) {
     return <ChapterText book={book} chapter={chapter}></ChapterText>
   }
 
-  if(dataChapterImgs?.imgChapterList && book?.bookId){
+  if (dataChapterImgs?.imgChapterList && book?.bookId) {
     return <ChapterImg book={book} chapterImgList={dataChapterImgs.imgChapterList}></ChapterImg>
   }
 
-
+  return (<Skeleton/>)
 }
 
 export default ChapterDetail

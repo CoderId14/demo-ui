@@ -44,32 +44,32 @@ function NavBarChapterDetail() {
       </Col>
       <Col span={11}>
         <Row justify={'end'}>
-        {user?.accessToken ? (
-          <div>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: '1',
-                    icon: <UserOutlined />,
-                    label: <span onClick={() => navigate('/')}>User Profile</span>
-                  },
-                  {
-                    key: '2',
-                    icon: <LogoutOutlined  />,
-                    label: <span onClick={handleLogout}>Logout</span>
-                  }
-                ]
-              }}
-            >
-              <Avatar icon={<UserOutlined />} />
-            </Dropdown>
-          </div>
-        ) : (
-          <Button type='primary' size='large'>
-            Login
-          </Button>
-        )}
+          {user?.accessToken ? (
+            <div>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: '1',
+                      icon: <UserOutlined />,
+                      label: <span onClick={() => navigate('/')}>User Profile</span>
+                    },
+                    {
+                      key: '2',
+                      icon: <LogoutOutlined />,
+                      label: <span onClick={handleLogout}>Logout</span>
+                    }
+                  ]
+                }}
+              >
+                <Avatar icon={<UserOutlined />} />
+              </Dropdown>
+            </div>
+          ) : (
+            <Button type='primary' size='large'>
+              Login
+            </Button>
+          )}
         </Row>
       </Col>
     </Row>

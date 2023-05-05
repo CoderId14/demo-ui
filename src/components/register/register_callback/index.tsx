@@ -5,7 +5,6 @@ import { activeUser } from '@/apiRequests/registerRequest'
 import { AppConst } from '@/app-const'
 
 export default function RegisterCallback() {
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const urlParam = new URLSearchParams(window.location.search)

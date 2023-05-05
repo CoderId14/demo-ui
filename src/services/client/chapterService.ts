@@ -1,5 +1,11 @@
 import { getChapterDetail, searchChapter, searchChapterImgs } from '@/apiRequests/chapter/chapterRequest'
-import { Chapter, ChapterImagesSearchParams, ChapterImgsSearchResponse, ChapterSearchParams, ChapterSearchResponse } from '@/types/chapter/chapter.type'
+import {
+  Chapter,
+  ChapterImagesSearchParams,
+  ChapterImgsSearchResponse,
+  ChapterSearchParams,
+  ChapterSearchResponse
+} from '@/types/chapter/chapter.type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useFetchChapters(params: ChapterSearchParams) {

@@ -1,5 +1,11 @@
 import axiosInstance, { ErrorResponse } from '@/config/axios'
-import { Chapter, ChapterImagesSearchParams, ChapterImgsSearchResponse, ChapterSearchParams, ChapterSearchResponse } from '@/types/chapter/chapter.type'
+import {
+  Chapter,
+  ChapterImagesSearchParams,
+  ChapterImgsSearchResponse,
+  ChapterSearchParams,
+  ChapterSearchResponse
+} from '@/types/chapter/chapter.type'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -28,7 +34,6 @@ export const searchChapter = async (params: ChapterSearchParams) => {
     }
   }
 }
-
 
 export const searchChapterImgs = async (params: ChapterImagesSearchParams) => {
   try {

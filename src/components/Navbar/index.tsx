@@ -22,12 +22,11 @@ export const NavbarMain = () => {
     if (user) logOut(dispatch, navigate)
   }
 
-  
   return (
     <>
       <Header className={cx('layout-page-header')} style={{ backgroundColor: 'white' }}>
         <div className={cx('item')}>
-          <Space size={[40,10]} align='center'>
+          <Space size={[40, 10]} align='center'>
             <Link to={AppConst.HOME_URL}>
               <HomeOutlined style={{ fontSize: 36, marginTop: 4 }} />
             </Link>
@@ -48,15 +47,14 @@ export const NavbarMain = () => {
               }}
             >
               <Space align='center'>
-                <UnorderedListOutlined style={{fontSize: 24}}/>
-                <strong >Category</strong>
-              </Space> 
+                <UnorderedListOutlined style={{ fontSize: 24 }} />
+                <strong>Category</strong>
+              </Space>
             </Dropdown>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-            <Search></Search>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Search></Search>
             </div>
           </Space>
-          
         </div>
         {user?.accessToken ? (
           <div className={cx('item')}>
