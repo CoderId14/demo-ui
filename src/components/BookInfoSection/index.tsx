@@ -11,6 +11,7 @@ import {
 import { Alert, Button, Col, Divider, Image, Rate, Row, Skeleton, Space, Tag, Typography } from 'antd'
 import { memo } from 'react'
 import { NavLink } from 'react-router-dom'
+import ContentSection from './ContentSection'
 const { Title, Text, Paragraph } = Typography
 
 interface Props {
@@ -102,9 +103,7 @@ function BookInfoSection({ bookId }: Props) {
           <Title level={3}>Content</Title>
         </Space>
       </Divider>
-      <Row>
-        <Paragraph ellipsis={true && { rows: 2, expandable: true, symbol: 'more' }}>{book.content}</Paragraph>
-      </Row>
+      <ContentSection content={book.content}></ContentSection>
     </>
   )
 }
