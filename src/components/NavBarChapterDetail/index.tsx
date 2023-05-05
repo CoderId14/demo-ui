@@ -1,8 +1,8 @@
 import { logOut } from '@/apiRequests/logoutRequest'
 import { AppConst } from '@/app-const'
 import { selectAuth } from '@/redux/store'
-import { HomeOutlined, LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Breadcrumb, Col, Dropdown, MenuProps, Row, Space } from 'antd'
+import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { Avatar, Breadcrumb, Button, Col, Dropdown, Row, Space } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
@@ -14,26 +14,6 @@ function NavBarChapterDetail() {
   const handleLogout = () => {
     if (user) logOut(dispatch, navigate)
   }
-
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: (
-        <NavLink to='/' onClick={handleLogout}>
-          <LogoutOutlined style={{ fontSize: 24 }} />
-          Logout
-        </NavLink>
-      )
-    },
-    {
-      key: '2',
-      label: (
-        <NavLink to={AppConst.LOGIN_URL}>
-          <LoginOutlined style={{ fontSize: 24 }} />, Login
-        </NavLink>
-      )
-    }
-  ]
   return (
     <Row gutter={16} style={{ height: 50 }} align={'middle'}>
       <Col span={11} offset={1}>
@@ -64,9 +44,32 @@ function NavBarChapterDetail() {
       </Col>
       <Col span={11}>
         <Row justify={'end'}>
-          <Dropdown menu={{ items }} placement='bottomRight'>
-            <Avatar icon={<UserOutlined style={{ fontSize: 24 }} />} />
-          </Dropdown>
+        {user?.accessToken ? (
+          <div>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: '1',
+                    icon: <UserOutlined />,
+                    label: <span onClick={() => navigate('/')}>User Profile</span>
+                  },
+                  {
+                    key: '2',
+                    icon: <LogoutOutlined  />,
+                    label: <span onClick={handleLogout}>Logout</span>
+                  }
+                ]
+              }}
+            >
+              <Avatar icon={<UserOutlined />} />
+            </Dropdown>
+          </div>
+        ) : (
+          <Button type='primary' size='large'>
+            Login
+          </Button>
+        )}
         </Row>
       </Col>
     </Row>

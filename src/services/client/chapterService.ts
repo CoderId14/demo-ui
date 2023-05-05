@@ -1,5 +1,5 @@
-import { getChapterDetail, searchChapter } from '@/apiRequests/chapter/chapterRequest'
-import { Chapter, ChapterSearchParams, ChapterSearchResponse } from '@/types/chapter/chapter.type'
+import { getChapterDetail, searchChapter, searchChapterImgs } from '@/apiRequests/chapter/chapterRequest'
+import { Chapter, ChapterImagesSearchParams, ChapterImgsSearchResponse, ChapterSearchParams, ChapterSearchResponse } from '@/types/chapter/chapter.type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useFetchChapters(params: ChapterSearchParams) {
@@ -23,6 +23,26 @@ export function useFetchChapters(params: ChapterSearchParams) {
   }
 }
 
+export function useFetchChapterImgs(params: ChapterImagesSearchParams) {
+  const queryClient = useQueryClient()
+
+  const queryKey = ['chapterImg', params]
+
+  const queryOptions = {
+    onSuccess: (data: ChapterImgsSearchResponse) => {
+      queryClient.setQueryData(queryKey, data)
+    }
+  }
+
+  const query = useQuery(queryKey, () => searchChapterImgs(params), queryOptions)
+
+  return {
+    status: query.status,
+    data: query.data,
+    error: query.error,
+    isFetching: query.isFetching
+  }
+}
 interface Props {
   chapterId: number
 }

@@ -5,6 +5,8 @@ import { memo } from 'react'
 
 import { useFetchChapters } from '@/services/client/chapterService'
 import { Chapter } from '@/types/chapter/chapter.type'
+import { Link } from 'react-router-dom'
+import { AppConst } from '@/app-const'
 const { Title, Paragraph } = Typography
 interface Props {
   bookId: number
@@ -62,7 +64,9 @@ function ChapterListSection({ bookId }: Props) {
         dataSource={chapterData}
         renderItem={(item) => (
           <List.Item>
-            <Typography.Text mark>Chapter</Typography.Text> {item?.chapterNumber}: {item?.title}
+            <Link to={AppConst.BOOK_DETAIL_URL + item.bookId + AppConst.CHAPTER_DETAIL_URL + item.id}>
+              Chapter {item?.chapterNumber}: {item?.title}
+            </Link>
           </List.Item>
         )}
       />
