@@ -12,7 +12,7 @@ import { Alert, Button, Col, Divider, Image, Rate, Row, Skeleton, Space, Tag, Ty
 import { memo } from 'react'
 import { NavLink } from 'react-router-dom'
 import ContentSection from './ContentSection'
-const { Title, Text, Paragraph } = Typography
+const { Title, Text } = Typography
 
 interface Props {
   bookId: number
