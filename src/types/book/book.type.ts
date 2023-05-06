@@ -15,6 +15,7 @@ export interface Book {
   likeCount: number
   averageRating: number
   premium: boolean
+  liked: boolean
 }
 export interface BookDetails {
   bookId: number
@@ -31,6 +32,7 @@ export interface BookDetails {
   likeCount: number
   averageRating: number
   premium: boolean
+  liked: boolean
 }
 export interface BookResponse {
   content: Book[]

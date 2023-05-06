@@ -13,6 +13,7 @@ import ErrorPage403 from '@/components/ErrorPage/Page_403'
 import BookDetail from '@/pages/BookDetail'
 import ChapterDetail from '@/pages/ChapterDetail'
 import SearchBook from '@/pages/SearchBook'
+import BookMarkList from '@/pages/BookMarkList'
 
 const publicRoutes = [
   { path: AppConst.LOGIN_URL, component: Login },
@@ -23,6 +24,7 @@ const publicRoutes = [
   { path: AppConst.CHANGE_PASSWORD_URL, component: ChangePasswordForm },
   { path: AppConst.REGISTER_CALLBACK_URL, component: RegisterCallback },
   { path: '/book/:id', component: BookDetail },
+  { path: '/bookmark', component: BookMarkList },
   { path: '/search', component: SearchBook },
 
   { path: AppConst.ERROR_PAGE_403, component: ErrorPage403 },

@@ -13,3 +13,9 @@ export interface BookParamRequest {
   size?: number
   detail?: boolean | string
 }
+
+export interface BookMarkParamRequest {
+  book?: number
+  page: number
+  size: number
+}

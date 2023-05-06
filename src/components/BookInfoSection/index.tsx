@@ -6,12 +6,14 @@ import {
   FileTextOutlined,
   EyeOutlined,
   PlusOutlined,
-  ContainerOutlined
+  ContainerOutlined,
+  MinusOutlined
 } from '@ant-design/icons'
 import { Alert, Button, Col, Divider, Image, Rate, Row, Skeleton, Space, Tag, Typography } from 'antd'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import ContentSection from './ContentSection'
+import { useAddBookMark, useRemoveBookMark } from '../../services/client/userService';
 const { Title, Text } = Typography
 
 interface Props {
@@ -23,11 +25,23 @@ function BookInfoSection({ bookId }: Props) {
     detail: true,
     id: bookId
   })
+  const useAddBookMarkMutation = useAddBookMark();
+  const useRemoveBookMarkMutation = useRemoveBookMark();
+  const handleAddBookMark = () => {
+    useAddBookMarkMutation.mutate({bookId: book.bookId})
+    setIsBookMark(true)
+  };
+
+  const handleRemoveBookMark = () => {
+    useRemoveBookMarkMutation.mutate({bookId: book.bookId})
+    setIsBookMark(false)
+  };
   let bookData: BookDetails[] = []
   if (data?.content) {
     bookData = convertBooksToBookDetails(data.content)
   }
   const book = bookData[0]
+  const [isBookMark, setIsBookMark] = useState(book?.liked || false);
   if (isFetching) {
     return <Skeleton />
   }
@@ -88,8 +102,9 @@ function BookInfoSection({ bookId }: Props) {
                 type='primary'
                 shape='round'
                 size='large'
-                icon={<PlusOutlined />}
+                icon={isBookMark ? <MinusOutlined /> : <PlusOutlined />}
                 className='d-flex align-items-center'
+                onClick={isBookMark ? handleRemoveBookMark : handleAddBookMark}
               >
                 Bookmark
               </Button>

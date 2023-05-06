@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { logOut } from '@/apiRequests/logoutRequest'
 
 import { Avatar, Button, Dropdown, Space } from 'antd'
-import { HomeOutlined, LogoutOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons'
+import { BookOutlined, HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 
 import classNames from 'classnames/bind'
 import styles from './Nav.module.scss'
@@ -34,27 +34,6 @@ export const NavbarMain = () => {
             <Link to={AppConst.HOME_URL}>
               <HomeOutlined style={{ fontSize: 36, marginTop: 4 }} />
             </Link>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: '1',
-                    icon: <UserOutlined className={cx('icon-action')} />,
-                    label: <span onClick={() => navigate('/')}>User Profile</span>
-                  },
-                  {
-                    key: '2',
-                    icon: <LogoutOutlined className={cx('icon-action')} />,
-                    label: <span onClick={handleLogout}>Logout</span>
-                  }
-                ]
-              }}
-            >
-              <Space align='center'>
-                <UnorderedListOutlined style={{ fontSize: 24 }} />
-                <strong>Category</strong>
-              </Space>
-            </Dropdown>
           </Space>
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -67,8 +46,8 @@ export const NavbarMain = () => {
                 items: [
                   {
                     key: '1',
-                    icon: <UserOutlined className={cx('icon-action')} />,
-                    label: <span onClick={() => navigate('/')}>User Profile</span>
+                    icon: <BookOutlined className={cx('icon-action')} />,
+                    label: <span onClick={() => navigate('/bookmark')}>BookMark</span>
                   },
                   {
                     key: '2',

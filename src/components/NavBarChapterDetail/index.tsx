@@ -2,7 +2,7 @@ import { logOut } from '@/apiRequests/logoutRequest'
 import { AppConst } from '@/app-const'
 import { selectAuth } from '@/redux/store'
 import { Book } from '@/types/book/book.type'
-import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { BookOutlined, HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Breadcrumb, Button, Col, Dropdown, Row, Space } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
@@ -46,8 +46,8 @@ function NavBarChapterDetail({ book }: Props) {
                   items: [
                     {
                       key: '1',
-                      icon: <UserOutlined />,
-                      label: <span onClick={() => navigate('/')}>User Profile</span>
+                      icon: <BookOutlined />,
+                      label: <span onClick={() => navigate('/bookmark')}>BookMark</span>
                     },
                     {
                       key: '2',
