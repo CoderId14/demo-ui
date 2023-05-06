@@ -1,5 +1,6 @@
+import { getUserInfo } from "@/apiRequests/user";
 import axiosInstance, { ErrorResponse } from "@/config/axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -83,3 +84,19 @@ export const addBookMark = async (info: IBookMark) => {
       }
     })
   }
+
+  export function useFetchUserInfo() {
+    const queryClient = useQueryClient()
+  
+    const queryKey = ['user']
+  
+    const queryOptions = {
+      onSuccess: (data: UserInfo) => {
+        queryClient.setQueryData(queryKey, data)
+      }
+    }
+  
+    const query = useQuery(queryKey, () => getUserInfo(), queryOptions)
+  
+    return query
+}

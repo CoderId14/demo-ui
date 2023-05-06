@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { logOut } from '@/apiRequests/logoutRequest'
 
 import { Avatar, Button, Dropdown, Space } from 'antd'
-import { BookOutlined, HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { BookOutlined, DollarCircleOutlined, HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 
 import classNames from 'classnames/bind'
 import styles from './Nav.module.scss'
@@ -46,12 +46,22 @@ export const NavbarMain = () => {
                 items: [
                   {
                     key: '1',
-                    icon: <BookOutlined className={cx('icon-action')} />,
-                    label: <span onClick={() => navigate('/bookmark')}>BookMark</span>
+                    icon: <UserOutlined />,
+                    label: <span onClick={() => navigate('/userProfile')}>UserProfile</span>
                   },
                   {
                     key: '2',
-                    icon: <LogoutOutlined className={cx('icon-action')} />,
+                    icon: <BookOutlined />,
+                    label: <span onClick={() => navigate('/bookmark')}>BookMark</span>
+                  },
+                  {
+                    key: '3',
+                    icon: <DollarCircleOutlined />,
+                    label: <span onClick={() => navigate('/loadcoin')}>Coin</span>
+                  },
+                  {
+                    key: '4',
+                    icon: <LogoutOutlined />,
                     label: <span onClick={handleLogout}>Logout</span>
                   }
                 ]
