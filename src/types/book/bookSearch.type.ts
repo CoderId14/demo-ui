@@ -3,10 +3,11 @@ export interface BookParamRequest {
   title?: string
   content?: string
   shortDescription?: string
-  categories?: number[]
-  tags?: number[]
+  categories?: string
+  tags?: string
   thumbnail?: string | null
   thumbnailUrl?: string
+  createdDate?: string
   user?: number
   page?: number
   size?: number

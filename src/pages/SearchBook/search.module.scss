@@ -1,0 +1,20 @@
+.search-wrapper {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 697px;
+}
+
+.search{
+    border-bottom: 2px solid #e5e5e5;
+    font-size: 32px;
+    padding: 0 38px;
+    background-color: transparent;
+    line-height: 68px;
+    height: 68px;
+    caret-color: #4c5fe2;
+    border: 0;
+    outline: 0;
+    width: 300px;
+}

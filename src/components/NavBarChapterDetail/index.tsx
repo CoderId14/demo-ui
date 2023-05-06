@@ -1,12 +1,16 @@
 import { logOut } from '@/apiRequests/logoutRequest'
 import { AppConst } from '@/app-const'
 import { selectAuth } from '@/redux/store'
+import { Book } from '@/types/book/book.type'
 import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Breadcrumb, Button, Col, Dropdown, Row, Space } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
-function NavBarChapterDetail() {
+interface Props {
+  book?: Book;
+}
+function NavBarChapterDetail({ book }: Props) {
   const login = useSelector(selectAuth).login
   const user = login?.user ? login.user : null
   const dispatch = useDispatch()
@@ -26,17 +30,8 @@ function NavBarChapterDetail() {
               style={{ whiteSpace: 'nowrap' }}
               items={[
                 {
-                  title: 'Home'
+                  title: <Link to={book?.bookId ? "/book/" + book?.bookId : '/'}>{book?.title}</Link>
                 },
-                {
-                  title: <Link to={AppConst.HOME_URL}>Test</Link>
-                },
-                {
-                  title: <Link to={AppConst.HOME_URL}>Test</Link>
-                },
-                {
-                  title: 'An Application'
-                }
               ]}
             />
           </Space>

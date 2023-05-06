@@ -1,4 +1,4 @@
-export interface Tag {
+export interface ITag {
   tagId: number
   tagName: string
   description: string
@@ -9,4 +9,14 @@ export interface TagSearchParams {
   id?: number
   name?: string
   books?: number[]
+  page?: number
+  size?: number
+}
+export interface TagSearchResponse {
+  content: ITag[]
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+  last: boolean
 }

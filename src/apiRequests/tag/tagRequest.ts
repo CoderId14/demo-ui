@@ -1,6 +1,6 @@
 import { AppConst } from '@/app-const'
 import axiosInstance from '@/config/axios'
-import { Tag, TagSearchParams } from '@/types/tag/tag.type'
+import { ITag, TagSearchParams } from '@/types/tag/tag.type'
 import { toast } from 'react-toastify'
 
 export const getTags = async (params: TagSearchParams) => {
@@ -11,7 +11,7 @@ export const getTags = async (params: TagSearchParams) => {
       },
       params: params
     })
-    const data: Tag = res.data
+    const data: ITag = res.data
     return data
   } catch (err: any) {
     // catch error

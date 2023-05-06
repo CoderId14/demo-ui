@@ -1,4 +1,3 @@
-import NavBarChapterDetail from '@/components/NavBarChapterDetail'
 
 import { Layout } from 'antd'
 import { Content, Footer } from 'antd/lib/layout/layout'
@@ -10,7 +9,6 @@ interface Props {
 function SpecialLayout(props: Props) {
   return (
     <Layout>
-      <NavBarChapterDetail></NavBarChapterDetail>
       <Layout>
         <Content style={{ padding: '0 50px' }}>{props.children}</Content>
       </Layout>

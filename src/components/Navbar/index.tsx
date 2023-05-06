@@ -11,7 +11,6 @@ import styles from './Nav.module.scss'
 import { AppConst } from '@/app-const'
 import { Header } from 'antd/lib/layout/layout'
 import Search from 'antd/es/input/Search'
-
 const cx = classNames.bind(styles)
 export const NavbarMain = () => {
   const login = useSelector(selectAuth).login
@@ -22,6 +21,11 @@ export const NavbarMain = () => {
     if (user) logOut(dispatch, navigate)
   }
 
+  const handleRedirect = (value: string) => {
+    const data = { title: value }
+    console.log('title: ' + value)
+    navigate('/search', { state: data })
+  }
   return (
     <>
       <Header className={cx('layout-page-header')} style={{ backgroundColor: 'white' }}>
@@ -51,10 +55,10 @@ export const NavbarMain = () => {
                 <strong>Category</strong>
               </Space>
             </Dropdown>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Search></Search>
-            </div>
           </Space>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Search onSearch={handleRedirect}></Search>
         </div>
         {user?.accessToken ? (
           <div className={cx('item')}>

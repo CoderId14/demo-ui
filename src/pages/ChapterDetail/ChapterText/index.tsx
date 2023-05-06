@@ -1,25 +1,30 @@
+import NavBarChapterDetail from '@/components/NavBarChapterDetail'
 import TestComponent from '@/components/testComponent'
+import { useFetchChapterDetail } from '@/services/client/chapterService'
 import { Book } from '@/types/book/book.type'
 import { Chapter } from '@/types/chapter/chapter.type'
 import { ReadOutlined } from '@ant-design/icons'
-import { Editor } from '@tinymce/tinymce-react'
-import { Card, Divider, Image, Row } from 'antd'
+import { Card, Divider, Image, Row, Skeleton } from 'antd'
 import Title from 'antd/lib/typography/Title'
-import { useRef } from 'react'
+import { memo } from 'react'
 interface Props {
   chapter: Chapter
   book: Book
 }
 function ChapterText({ chapter, book }: Props) {
-  const editorRef: any = useRef(null)
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent())
-    }
-  }
 
+  const { data, isFetching } = useFetchChapterDetail({
+    chapterId: Number(chapter.id)
+  })
+
+  console.log("re rendering chapterText")
+  if (isFetching) {
+    return <Skeleton />
+  }
   return (
     <>
+      <NavBarChapterDetail book={book}></NavBarChapterDetail>
+
       <Row justify={'center'}>
         <Card cover={<Image src={book?.thumbnailUrl} width={300}></Image>}></Card>
       </Row>
@@ -34,36 +39,13 @@ function ChapterText({ chapter, book }: Props) {
       </Divider>
       <Row>
         <Title level={3}>
-          Chapter {chapter.chapterNumber}: {chapter.title}{' '}
+          Chapter {data?.chapterNumber}: {data?.title}{' '}
         </Title>
       </Row>
-      <TestComponent content={chapter?.content} />
-
+      <TestComponent content={data?.content} />
       <Divider></Divider>
-
-      <Editor
-        apiKey='pmfqllzhlpfn980wmee9dndck6vclx7hy331lmx0dcimpm6l'
-        onInit={(_evt, editor) => (editorRef.current = editor)}
-        initialValue='<p>This is the initial content of the editor.</p>'
-        init={{
-          height: 500,
-          menubar: false,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-          ],
-          toolbar:
-            'undo redo | formatselect | ' +
-            'bold italic backcolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
-      />
-      <button onClick={log}>Log editor content</button>
     </>
   )
 }
 
-export default ChapterText
+export default memo(ChapterText)
