@@ -1,24 +1,23 @@
-import axiosInstance from "@/config/axios";
-import { useFetchUserInfo } from "@/services/client/userService";
-import { Button, Col, Image, Row, Skeleton, Space } from "antd";
-import { toast } from "react-toastify";
+import axiosInstance from '@/config/axios'
+import { useFetchUserInfo } from '@/services/client/userService'
+import { Button, Col, Image, Row, Skeleton, Space } from 'antd'
+import { toast } from 'react-toastify'
 function UserProfile() {
-    const {data, isFetching} = useFetchUserInfo();
-    
-    const handleSubmit = async () => {
-      try {
-        const response = await axiosInstance.get('/user/v1/open-premium');
-        toast.success(response.data)
-      } catch (error: any) {
-        toast.error(error.message)
-        
-      }
-    };
-    if(isFetching){
-        return <Skeleton/>
+  const { data, isFetching } = useFetchUserInfo()
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axiosInstance.get('/user/v1/open-premium')
+      toast.success(response.data)
+    } catch (error: any) {
+      toast.error(error.message)
     }
-    return ( 
-        <>
+  }
+  if (isFetching) {
+    return <Skeleton />
+  }
+  return (
+    <>
       <Row
         style={{
           backgroundColor: '#f5f6fc',
@@ -39,16 +38,20 @@ function UserProfile() {
                 <span>Coin: {data?.coin}</span>
               </Space>
               <Space>
-                {data?.roles.find(role => role.match("ROLE_USER_VIP"))? "VIP" : (<Button type="primary" onClick={handleSubmit}><a>OPEN VIP</a></Button>)}
+                {data?.roles.find((role) => role.match('ROLE_USER_VIP')) ? (
+                  'VIP'
+                ) : (
+                  <Button type='primary' onClick={handleSubmit}>
+                    <a>OPEN VIP</a>
+                  </Button>
+                )}
               </Space>
             </Space>
-
           </div>
-        
         </Col>
       </Row>
     </>
-     );
+  )
 }
 
-export default UserProfile;
+export default UserProfile

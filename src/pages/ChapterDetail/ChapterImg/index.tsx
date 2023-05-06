@@ -1,28 +1,32 @@
-import { Book } from '@/types/book/book.type'
-import { ImgChapterList } from '@/types/chapter/chapter.type'
-import { Image, List } from 'antd'
+import { useFetchChapterImgs } from '@/services/client/chapterService'
+import { Chapter } from '@/types/chapter/chapter.type'
+import { Image, List, Skeleton } from 'antd'
 
 interface Props {
-  chapterImgList: ImgChapterList
-  book: Book
+  chapter: Chapter
 }
-function ChapterImg({ chapterImgList, book }: Props) {
+function ChapterImg({ chapter }: Props) {
+  const { data: dataChapterImgs, isFetching: isFetchingChapterImgs } = useFetchChapterImgs({
+    chapterId: Number(chapter.id)
+  })
+
+  if (isFetchingChapterImgs) {
+    return <Skeleton />
+  }
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <List
-        dataSource={chapterImgList.content}
-        pagination={{
-          position: 'both',
-          align: 'center',
-          total: book?.latestChapters ? book.latestChapters[0].chapterNumber : 10
-        }}
-        renderItem={(item) => (
-          <List.Item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Image src={item.fileUrl}></Image>
-          </List.Item>
-        )}
-      ></List>
-    </div>
+    <>
+      
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <List
+          dataSource={dataChapterImgs?.imgChapterList?.content}
+          renderItem={(item) => (
+            <List.Item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Image src={item.fileUrl} preview={false}></Image>
+            </List.Item>
+          )}
+        ></List>
+      </div>
+    </>
   )
 }
 

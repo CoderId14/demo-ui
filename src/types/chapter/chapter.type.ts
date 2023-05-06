@@ -26,6 +26,7 @@ export interface ChapterSearchResponse {
 
 export interface ChapterSearchParams {
   book: number
+  id?: number
   name?: string
   size?: number
   sort?: string
