@@ -17,7 +17,8 @@ export function convertBookToBookDetails(book: Book): BookDetails {
     averageRating: book.averageRating,
     premium: book.premium,
     liked: book.liked,
-    novel: book.novel
+    novel: book.novel,
+    reviewCount: book.reviewCount
   }
 }
 

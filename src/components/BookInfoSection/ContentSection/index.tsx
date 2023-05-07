@@ -23,8 +23,8 @@ function ContentSection({ content }: Props) {
     }
     return (
       <React.Fragment>
-        <span dangerouslySetInnerHTML={{ __html: content.slice(0, 150) }}></span>
-        {content.length > 100 && <a onClick={toggleExpand}>...more</a>}
+        <span dangerouslySetInnerHTML={{ __html: content?.length > 150 ? content.slice(0, 150) : content }}></span>
+        {content?.length > 100 && <a onClick={toggleExpand}>...more</a>}
       </React.Fragment>
     )
   }

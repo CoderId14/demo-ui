@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
 interface Props {
-  book?: Book;
+  book?: Book
 }
 function NavBarChapterDetail({ book }: Props) {
   const login = useSelector(selectAuth).login
@@ -30,8 +30,8 @@ function NavBarChapterDetail({ book }: Props) {
               style={{ whiteSpace: 'nowrap' }}
               items={[
                 {
-                  title: <Link to={book?.bookId ? "/book/" + book?.bookId : '/'}>{book?.title}</Link>
-                },
+                  title: <Link to={book?.bookId ? '/book/' + book?.bookId : '/'}>{book?.title}</Link>
+                }
               ]}
             />
           </Space>

@@ -12,12 +12,11 @@ interface Props {
   book: Book
 }
 function ChapterText({ chapter, book }: Props) {
-
   const { data, isFetching } = useFetchChapterDetail({
     chapterId: Number(chapter.id)
   })
 
-  console.log("re rendering chapterText")
+  console.log('re rendering chapterText')
   if (isFetching) {
     return <Skeleton />
   }

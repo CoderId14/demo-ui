@@ -5,13 +5,13 @@ import { BookDetails } from '@/types/book/book.type'
 import { Skeleton } from 'antd'
 
 function BookMarkList() {
-  const { data, isFetching } = useFetchBookMarks({page: 0, size: 30})
+  const { data, isFetching } = useFetchBookMarks({ page: 0, size: 30 })
   let bookData: BookDetails[] = []
   if (data?.content) {
     bookData = convertBooksToBookDetails(data.content)
   }
   if (isFetching) {
-    <Skeleton />
+    ;<Skeleton />
   }
   return <ListCard books={bookData}></ListCard>
 }

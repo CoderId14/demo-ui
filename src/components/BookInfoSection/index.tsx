@@ -13,7 +13,7 @@ import { Alert, Button, Col, Divider, Image, Rate, Row, Skeleton, Space, Tag, Ty
 import { memo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import ContentSection from './ContentSection'
-import { useAddBookMark, useRemoveBookMark } from '../../services/client/userService';
+import { useAddBookMark, useRemoveBookMark } from '../../services/client/userService'
 const { Title, Text } = Typography
 
 interface Props {
@@ -25,23 +25,23 @@ function BookInfoSection({ bookId }: Props) {
     detail: true,
     id: bookId
   })
-  const useAddBookMarkMutation = useAddBookMark();
-  const useRemoveBookMarkMutation = useRemoveBookMark();
+  const useAddBookMarkMutation = useAddBookMark()
+  const useRemoveBookMarkMutation = useRemoveBookMark()
   const handleAddBookMark = () => {
-    useAddBookMarkMutation.mutate({bookId: book.bookId})
+    useAddBookMarkMutation.mutate({ bookId: book.bookId })
     setIsBookMark(true)
-  };
+  }
 
   const handleRemoveBookMark = () => {
-    useRemoveBookMarkMutation.mutate({bookId: book.bookId})
+    useRemoveBookMarkMutation.mutate({ bookId: book.bookId })
     setIsBookMark(false)
-  };
+  }
   let bookData: BookDetails[] = []
   if (data?.content) {
     bookData = convertBooksToBookDetails(data.content)
   }
   const book = bookData[0]
-  const [isBookMark, setIsBookMark] = useState(book?.liked || false);
+  const [isBookMark, setIsBookMark] = useState(book?.liked || false)
   if (isFetching) {
     return <Skeleton />
   }
@@ -58,7 +58,7 @@ function BookInfoSection({ bookId }: Props) {
         gutter={16}
       >
         <Col lg={{ span: 8, offset: 2 }}>
-          <Image src={book.thumbnailUrl}></Image>
+          <Image src={book?.thumbnailUrl}></Image>
         </Col>
         <Col style={{ position: 'relative' }}>
           <Title>{book?.title}</Title>
@@ -70,7 +70,7 @@ function BookInfoSection({ bookId }: Props) {
                 <UnorderedListOutlined style={{ fontSize: 24 }} />
                 {book?.categories.map((category) => {
                   return (
-                    <NavLink to={'#'} key={category.categoryId}>
+                    <NavLink to={'#'} key={category?.categoryId}>
                       <Tag color='magenta'>{category?.categoryName}</Tag>
                     </NavLink>
                   )
@@ -78,18 +78,21 @@ function BookInfoSection({ bookId }: Props) {
               </Space>
               <Space>
                 <FileTextOutlined style={{ fontSize: 24 }} />
-                {book.latestChapters[0]?.chapterNumber} Chapters
+                {book?.latestChapters[0]?.chapterNumber} Chapters
               </Space>
               <Space>
                 <EyeOutlined style={{ fontSize: 24 }} />
-                {book.viewCount} View
+                {book?.viewCount} View
               </Space>
             </Space>
 
             <div>
               <Space>
-                <Rate disabled defaultValue={book.averageRating} />
-                <span style={{ fontSize: 24 }}> {book.averageRating} (70 review)</span>
+                <Rate disabled defaultValue={book?.averageRating} />
+                <span style={{ fontSize: 24 }}>
+                  {' '}
+                  {book?.averageRating} ({book?.reviewCount})
+                </span>
               </Space>
             </div>
           </div>
@@ -118,7 +121,7 @@ function BookInfoSection({ bookId }: Props) {
           <Title level={3}>Content</Title>
         </Space>
       </Divider>
-      <ContentSection content={book.content}></ContentSection>
+      <ContentSection content={book?.content}></ContentSection>
     </>
   )
 }

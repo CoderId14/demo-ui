@@ -15,7 +15,6 @@ function ChapterImg({ chapter }: Props) {
   }
   return (
     <>
-      
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <List
           dataSource={dataChapterImgs?.imgChapterList?.content}
