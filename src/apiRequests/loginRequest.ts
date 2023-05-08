@@ -63,7 +63,7 @@ export const loginUserWithGoogle = async (
 ) => {
   dispatch(loginStart())
   try {
-    const res = await axiosInstance.get('/user/current-user', {
+    const res = await axiosInstance.get('/user/v1/current-user', {
       headers: {
         Authorization: 'Bearer ' + accessToken
       }
