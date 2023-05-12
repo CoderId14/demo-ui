@@ -7,7 +7,8 @@ interface Props {
 }
 function ChapterImg({ chapter }: Props) {
   const { data: dataChapterImgs, isFetching: isFetchingChapterImgs } = useFetchChapterImgs({
-    chapterId: Number(chapter.id)
+    chapterId: Number(chapter.id),
+    sort: 'imgNumber,asc'
   })
 
   if (isFetchingChapterImgs) {

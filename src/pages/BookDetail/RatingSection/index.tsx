@@ -19,9 +19,11 @@ function RatingSection({ bookId }: Props) {
       renderItem={(item: IBookRating) => (
         <Row key={item.id}>
           <Col>
-            <Col style={{ display: 'flex' }}>
-              <UserOutlined></UserOutlined>
-              <span>{item.name}</span>
+            <Col style={{ display: 'flex', justifyContent: 'space-between' }} span={24}>
+              <div>
+                <UserOutlined></UserOutlined>
+                <span>{item.name}</span>
+              </div>
               <ButtonModalBookRating
                 bookId={bookId}
                 isUpdate
