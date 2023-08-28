@@ -116,7 +116,7 @@ function Login() {
 
           <Button type='default' block className={cx('btn-google')}>
             <GooglePlusOutlined className={cx('icon-google')} />
-            <a href='https://demo-production-627b.up.railway.app/oauth2/authorize/google?redirect_uri=https://demo-production-627b.up.railway.app/oauth2/callback/google'>
+            <a href='http://localhost:8080/oauth2/authorize/google?redirect_uri=https://demo-production-627b.up.railway.app/oauth2/callback/google'>
               Login With Google
             </a>
           </Button>

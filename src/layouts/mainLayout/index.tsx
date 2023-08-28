@@ -19,7 +19,7 @@ function MainLayout(props: Props) {
           textAlign: 'center'
         }}
       >
-        footer
+        Created by DTH
       </Footer>
     </Layout>
   )

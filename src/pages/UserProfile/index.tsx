@@ -1,6 +1,6 @@
 import axiosInstance from '@/config/axios'
 import { useFetchUserInfo } from '@/services/client/userService'
-import { Button, Col, Image, Row, Skeleton, Space } from 'antd'
+import { Button, Col, Form, Image, Input, Row, Skeleton, Space } from 'antd'
 import { toast } from 'react-toastify'
 function UserProfile() {
   const { data, isFetching } = useFetchUserInfo()
@@ -30,23 +30,25 @@ function UserProfile() {
         </Col>
         <Col style={{ position: 'relative' }}>
           <div style={{ marginTop: 10, marginBottom: 30 }}>
-            <Space direction='vertical' size={[0, 10]}>
-              <Space size={[4, 8]} wrap>
-                <span>Name: {data?.name}</span>
-              </Space>
-              <Space>
-                <span>Coin: {data?.coin}</span>
-              </Space>
-              <Space>
-                {data?.roles.find((role) => role.match('ROLE_USER_VIP')) ? (
+            
+              <Form initialValues={{ name: data?.name, coin: data?.coin }}>
+                <Form.Item label='Name' name={'name'}>
+                  <Input></Input>
+                </Form.Item>
+
+                <Form.Item label='Coin' name={'coin'}>
+                  <Input disabled></Input>
+                </Form.Item>
+
+                {data?.roles?.find((role) => role.match('ROLE_USER_VIP')) ? (
                   'VIP'
                 ) : (
                   <Button type='primary' onClick={handleSubmit}>
                     <a>OPEN VIP</a>
                   </Button>
                 )}
-              </Space>
-            </Space>
+              </Form>
+        
           </div>
         </Col>
       </Row>

@@ -36,9 +36,9 @@ export const NavbarMain = () => {
             </Link>
           </Space>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        { user?.accessToken && <div style={{ display: 'flex', alignItems: 'center' }}>
           <Search onSearch={handleRedirect}></Search>
-        </div>
+        </div>}
         {user?.accessToken ? (
           <div className={cx('item')}>
             <Dropdown
