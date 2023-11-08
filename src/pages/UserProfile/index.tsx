@@ -1,6 +1,6 @@
 import axiosInstance from '@/config/axios'
 import { useFetchUserInfo } from '@/services/client/userService'
-import { Button, Col, Form, Image, Input, Row, Skeleton, Space } from 'antd'
+import { Button, Col, Form, Image, Input, Row, Skeleton } from 'antd'
 import { toast } from 'react-toastify'
 function UserProfile() {
   const { data, isFetching } = useFetchUserInfo()

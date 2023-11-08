@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons'
 import { Alert, Button, Col, Divider, Image, Rate, Row, Skeleton, Space, Tag, Typography } from 'antd'
 import { memo, useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ContentSection from './ContentSection'
 import { useAddBookMark, useRemoveBookMark } from '../../services/client/userService'
 const { Title, Text } = Typography
