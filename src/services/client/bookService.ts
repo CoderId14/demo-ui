@@ -1,6 +1,7 @@
 import {
   addBookRating,
   deleteBookRating,
+  fetchRecommendations,
   searchBook,
   searchBookMark,
   searchBookRating,
@@ -29,6 +30,22 @@ export function useFetchBooks(params: BookParamRequest) {
   }
 
   const query = useQuery(queryKey, () => searchBook(params), queryOptions)
+
+  return query
+}
+
+export function useFetchBookRecommendations() {
+  const queryClient = useQueryClient()
+
+  const queryKey = ['book-recommendations']
+
+  const queryOptions = {
+    onSuccess: (data: BookResponse) => {
+      queryClient.setQueryData(queryKey, data)
+    }
+  }
+
+  const query = useQuery(queryKey, () => fetchRecommendations(), queryOptions)
 
   return query
 }

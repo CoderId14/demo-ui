@@ -54,6 +54,7 @@ export interface IBookRating {
   userId: number
   name: string
   rating: number
+  ratingId: number
   comment: string
   modifiedDate: string
 }

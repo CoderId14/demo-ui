@@ -73,17 +73,18 @@ interface Props {
   initialValues?: UpdateProps
   isUpdate?: boolean
   bookId: number
+  ratingId?: number
 }
 type PropsWithInitialValues<T> = T extends { isUpdate: true } ? { initialValues: UpdateProps } : {}
 
 type ComponentProps = Props & PropsWithInitialValues<Props>
-function ButtonModalBookRating({ initialValues, isUpdate = false, bookId }: ComponentProps) {
+function ButtonModalBookRating({ initialValues, isUpdate = false, bookId, ratingId }: ComponentProps) {
   const [open, setOpen] = useState(false)
 
   const onCreate = async (values: Values) => {
     console.log('Received values of form: ', values)
     if (isUpdate) {
-      const updateData: IUpdateRatingRequest = { ...values, ratingId: bookId }
+      const updateData: IUpdateRatingRequest = { ratingId: ratingId ? ratingId : 0, ...values }
       useUpdateBookRatingMutation.mutate(updateData)
     } else {
       const addData: IAddRatingRequest = { ...values, bookId: bookId }

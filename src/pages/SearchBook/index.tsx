@@ -49,6 +49,7 @@ interface IFieldValue {
 
 function SearchBook() {
   const { state } = useLocation()
+  console.log("state: ",state)
   const [form] = Form.useForm()
   const { data: categoriesData, isFetching: isFetchingCategory } = useFetchCategories({})
   const [categoryOptions, setCategoryOptions] = useState<SelectProps['options'] | undefined>()
@@ -58,7 +59,7 @@ function SearchBook() {
     size: 30,
     detail: true,
     title: state.title || undefined,
-    categories: state.categories?.join(',') || undefined,
+    categories: Array.from(state?.categories.keys()).flat().join(",") || undefined,
     tags: state.tags?.join(',') || undefined
   })
   const [bookData, setBookData] = useState<BookDetails[] | undefined>()
@@ -94,7 +95,7 @@ function SearchBook() {
   if (isFetchingCategory || isFetchingTag || isFetchingBook) {
     return <Skeleton />
   }
-
+  console.log("Array.from(state?.categories.entries()) : ",Array.from(state?.categories.entries()) )
   return (
     <Form
       form={form}
@@ -102,7 +103,7 @@ function SearchBook() {
       onFinish={onFinish}
       initialValues={{
         title: state.title,
-        categories: state.categories,
+        categories: {label: state?.categories.values().next().value, value: state?.categories.keys().next().value},
         tags: state.tags
       }}
     >

@@ -12,6 +12,31 @@ import axios from 'axios'
 import axiosInstance, { ErrorResponse } from '@/config/axios'
 import { ApiResponse } from '@/types/common.type'
 
+export const fetchRecommendations = async () => {
+  try {
+    const res = await axiosInstance.get<BookResponse>('/book/v1/viewCount', {
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+
+    return res.data
+  } catch (error: any) {
+    if (axios.isCancel(error)) {
+      // request was cancelled
+    } else if (error.response) {
+      // server returned an error
+      const data = error.response.data as any
+      toast.error(data.message)
+      return { error: data } as ErrorResponse
+    } else {
+      // network error
+      toast.error('Network error occurred.')
+      return { error: 'Network error occurred.' } as ErrorResponse
+    }
+  }
+}
+
 export const searchBook = async (params: BookParamRequest) => {
   try {
     const res = await axiosInstance.get<BookResponse>('/book/v1/search', {
