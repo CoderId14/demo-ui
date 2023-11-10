@@ -8,6 +8,7 @@ export interface User {
   username: string
   accessToken?: string
   roles: string
+  userId: number
 }
 
 export interface UserGoogleLoginSliceState {

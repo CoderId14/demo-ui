@@ -63,7 +63,7 @@ export const loginUserWithGoogle = async (
 ) => {
   dispatch(loginStart())
   try {
-    const res = await axiosInstance.get('/user/v1/current-user', {
+    const res = await axiosInstance.get('/user/v1/user-info', {
       headers: {
         Authorization: 'Bearer ' + accessToken
       }
@@ -77,6 +77,7 @@ export const loginUserWithGoogle = async (
         accessToken: accessToken
       })
     )
+    console.log('login with google success')
     navigate(AppConst.HOME_URL)
     return res
   } catch (error) {

@@ -4,12 +4,16 @@ import { UserOutlined } from '@ant-design/icons'
 import { Col, Divider, List, Rate, Row, Skeleton, Typography } from 'antd'
 import convertISOTimeToUserTimeZone from '../../../Utils/timeFormat'
 import ButtonModalBookRating from '../ButtonModalBookRating'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '@/redux/store'
 const { Paragraph } = Typography
 interface Props {
   bookId: number
 }
 function RatingSection({ bookId }: Props) {
   const { data, isFetching } = useFetchBookRatings({ book: bookId })
+  const login = useSelector(selectAuth).login
+  const user = login?.user ? login.user : null
   if (isFetching) {
     return <Skeleton paragraph={true}></Skeleton>
   }
@@ -23,17 +27,19 @@ function RatingSection({ bookId }: Props) {
               <UserOutlined></UserOutlined>
               <span>{item.name}</span>
             </div>
+            {((user && user.userId === item.userId) || user?.roles.includes("ROLE_ADMIN")) && (
             <ButtonModalBookRating
               bookId={bookId}
               ratingId={item.ratingId}
               isUpdate
               initialValues={{ comment: item.comment, rating: item.rating, ratingId: item.id }}
-            ></ButtonModalBookRating>
+            ></ButtonModalBookRating>)}
+
           </Col>
           <div>
             <Rate defaultValue={item.rating} disabled></Rate>
             <Paragraph>Comment: {item.comment}</Paragraph>
-            <Paragraph>{convertISOTimeToUserTimeZone(item.modifiedDate, { includeSeconds: true })}</Paragraph>
+            <Paragraph>{convertISOTimeToUserTimeZone(item.modifiedDate, { includeSeconds: true })} ago</Paragraph>
           </div>
           <Divider></Divider>
         </Row>

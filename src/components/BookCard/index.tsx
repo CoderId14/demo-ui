@@ -1,3 +1,4 @@
+
 import styled from 'styled-components'
 import { Card, Image, Row, Typography } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
@@ -5,6 +6,7 @@ import { LatestChapter } from '@/types/chapter/chapter.type'
 import { formatDistance } from 'date-fns'
 import { NavLink } from 'react-router-dom'
 import { AppConst } from '@/app-const'
+
 const { Text } = Typography
 
 const TitleText = styled(Text)`
@@ -35,15 +37,18 @@ const ChapterTime = styled(Text)`
     font-size: 12px;
   }
 `
+
 const ClockIcon = styled(ClockCircleOutlined)`
   margin-right: 4px;
 `
+
 interface Props {
   id: number
   title: string
   thumbnailUrl: string
   latestChapters: LatestChapter[]
 }
+
 const BookCard = ({ id, title, thumbnailUrl, latestChapters }: Props) => {
   return (
     <Card
@@ -56,7 +61,8 @@ const BookCard = ({ id, title, thumbnailUrl, latestChapters }: Props) => {
             preview={false}
             style={{
               objectFit: 'cover',
-              height: 400
+              height: '100%',
+              width: '100%'
             }}
           />
         </NavLink>

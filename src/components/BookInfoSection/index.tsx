@@ -10,7 +10,7 @@ import {
   MinusOutlined
 } from '@ant-design/icons'
 import { Alert, Button, Col, Divider, Image, Rate, Row, Skeleton, Space, Tag, Typography } from 'antd'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContentSection from './ContentSection'
 import { useAddBookMark, useRemoveBookMark } from '../../services/client/userService'
@@ -22,10 +22,18 @@ interface Props {
 function BookInfoSection({ bookId }: Props) {
   console.log('BookInfoSection rerendered')
   const navigate = useNavigate()
-  const { data, error, isFetching } = useFetchBooks({
+  const { data, error, isFetching, refetch } = useFetchBooks({
     detail: true,
     id: bookId
   })
+  // Initialize local state for bookmark status
+  const [isBookMark, setIsBookMark] = useState(false);
+  // Update isBookMark when data changes
+  useEffect(() => {
+    if (data) {
+      setIsBookMark(data.content[0].liked);
+    }
+  }, [data]);
   const useAddBookMarkMutation = useAddBookMark()
   const useRemoveBookMarkMutation = useRemoveBookMark()
   const handleAddBookMark = () => {
@@ -44,12 +52,18 @@ function BookInfoSection({ bookId }: Props) {
     navigate('/search', { state: data })
   }
 
+
   let bookData: BookDetails[] = []
   if (data?.content) {
     bookData = convertBooksToBookDetails(data.content)
   }
   const book = bookData[0]
-  const [isBookMark, setIsBookMark] = useState(book?.liked || false)
+  useEffect(() => {
+    refetch()
+
+    setIsBookMark(book?.liked)
+  }, [])
+  console.log('isBookMark: ', book?.liked)
   if (isFetching) {
     return <Skeleton />
   }
@@ -80,7 +94,7 @@ function BookInfoSection({ bookId }: Props) {
                 <UnorderedListOutlined style={{ fontSize: 24 }} />
                 {book?.categories.map((category) => {
                   return (
-                    <a onClick={() => handleRedirect({label: category.categoryName, value: category.categoryId})}>
+                    <a key={category.categoryId} onClick={() => handleRedirect({label: category.categoryName, value: category.categoryId})}>
                       <Tag color='magenta'>{category?.categoryName}</Tag>
                     </a>
                   )

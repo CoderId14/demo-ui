@@ -14,6 +14,7 @@ import { GooglePlusOutlined } from '@ant-design/icons'
 import classNames from 'classnames/bind'
 import styles from './Login.module.scss'
 import { toast } from 'react-toastify'
+import { HOST_NAME } from '@/environments'
 const cx = classNames.bind(styles)
 
 interface IFormInput {
@@ -21,6 +22,7 @@ interface IFormInput {
   password: string
 }
 
+const LOGIN_GOOGLE_URL  = `${HOST_NAME}/oauth2/authorize/google?redirect_uri=${HOST_NAME}/oauth2/callback/google`
 function Login() {
   const login = useSelector(selectAuth).login
   const user = login?.user ? login.user : null
@@ -116,7 +118,7 @@ function Login() {
 
           <Button type='default' block className={cx('btn-google')}>
             <GooglePlusOutlined className={cx('icon-google')} />
-            <a href='http://localhost:8080/oauth2/authorize/google?redirect_uri=https://demo-production-627b.up.railway.app/oauth2/callback/google'>
+            <a href={LOGIN_GOOGLE_URL}>
               Login With Google
             </a>
           </Button>

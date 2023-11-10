@@ -26,7 +26,8 @@ const authSlice = createSlice({
       state.login.user = {
         username: action.payload.sub,
         accessToken: action.payload.accessToken,
-        roles: action.payload.roles
+        roles: action.payload.roles,
+        userId: action.payload.userId
       }
       state.login.error = false
       state.login.message = 'Login successfully'
@@ -35,8 +36,9 @@ const authSlice = createSlice({
       console.log('action google login: ' + JSON.stringify(action.payload))
       state.login.isFetching = false
       state.login.user = {
-        username: action.payload.responseData,
+        username: action.payload.username,
         accessToken: action.payload.accessToken,
+        userId: action.payload.userId,
         roles: 'ROLE_USER'
       }
       state.login.error = false

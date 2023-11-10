@@ -25,8 +25,7 @@ const Home = () => {
     <>
       <Divider />
       <Title level={2}>Recommend Book</Title>
-      {isFetchingRecommend ? <PreLoad size='large' /> :
-      <BookCarousel books={letBookRecommend}></BookCarousel>}
+      {isFetchingRecommend ? <PreLoad size='large' /> : <BookCarousel books={letBookRecommend}></BookCarousel>}
       <Divider />
       <Title level={2}>List Book</Title>
       <ListCard books={bookData}></ListCard>
