@@ -47,7 +47,7 @@ export const NavbarMain = () => {
                   {
                     key: '1',
                     icon: <UserOutlined />,
-                    label: <span onClick={() => navigate('/userProfile')}>UserProfile</span>
+                    label: <span onClick={() => navigate(AppConst.USER_PROFILE_URL)}>UserProfile</span>
                   },
                   {
                     key: '2',
@@ -57,7 +57,7 @@ export const NavbarMain = () => {
                   {
                     key: '3',
                     icon: <DollarCircleOutlined />,
-                    label: <span onClick={() => navigate('/loadcoin')}>Coin</span>
+                    label: <span onClick={() => navigate(AppConst.LOAD_COIN_URL)}>Coin</span>
                   },
                   {
                     key: '4',

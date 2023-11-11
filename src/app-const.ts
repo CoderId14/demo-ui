@@ -9,6 +9,7 @@ export namespace AppConst {
   export const CHANGE_PASSWORD_URL = '/change-password'
   export const REGISTER_CALLBACK_URL = '/register/callback'
   export const HOME_ADMIN_URL = '/admin/home'
+  export const LOAD_COIN_URL = '/load-coin'
   export const HOME_URL = '/'
   export const RACER_RANKING_URL = '/bxh-racer'
   export const GRAND_PRIX_URL = '/admin/grandPrix'
@@ -17,7 +18,7 @@ export namespace AppConst {
   export const ADD_RACER_TO_GRAND_PRIX_URL = '/admin/race-team/addRacer/'
   export const BOOK_DETAIL_URL = '/book/'
   export const CHAPTER_DETAIL_URL = '/chapter/'
-
+  export const USER_PROFILE_URL = '/user/profile'
   export const ERROR_PAGE = '/error'
   export const ERROR_PAGE_403 = '/error_403'
 

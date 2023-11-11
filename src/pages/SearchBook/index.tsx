@@ -1,3 +1,4 @@
+
 import classNames from 'classnames/bind'
 import styles from './search.module.scss'
 import { Button, Col, DatePicker, Divider, Form, Input, Row, Select, SelectProps, Skeleton, Space } from 'antd'
@@ -58,8 +59,8 @@ function SearchBook() {
     page: 0,
     size: 30,
     detail: true,
-    title: state.title || undefined,
-    categories: Array.from(state?.categories.keys()).flat().join(",") || undefined,
+    title: state?.title || undefined,
+    categories: Array.from(state?.categories?.keys() || [])?.flat()?.join(",") || undefined,
     tags: state.tags?.join(',') || undefined
   })
   const [bookData, setBookData] = useState<BookDetails[] | undefined>()
@@ -95,7 +96,6 @@ function SearchBook() {
   if (isFetchingCategory || isFetchingTag || isFetchingBook) {
     return <Skeleton />
   }
-  console.log("Array.from(state?.categories.entries()) : ",Array.from(state?.categories.entries()) )
   return (
     <Form
       form={form}
@@ -103,7 +103,7 @@ function SearchBook() {
       onFinish={onFinish}
       initialValues={{
         title: state.title,
-        categories: {label: state?.categories.values().next().value, value: state?.categories.keys().next().value},
+        categories: state.categories ? { label: state.categories.values().next().value, value: state.categories.keys().next().value } : undefined,
         tags: state.tags
       }}
     >

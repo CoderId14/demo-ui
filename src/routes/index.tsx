@@ -16,6 +16,7 @@ import SearchBook from '@/pages/SearchBook'
 import BookMarkList from '@/pages/BookMarkList'
 import LoadCoin from '@/pages/LoadCoin'
 import UserProfile from '@/pages/UserProfile'
+import RedirectLoadCoin from '@/pages/LoadCoin/RedirectLoadCoin'
 
 const publicRoutes = [
   { path: AppConst.LOGIN_URL, component: Login },
@@ -26,8 +27,9 @@ const publicRoutes = [
   { path: AppConst.CHANGE_PASSWORD_URL, component: ChangePasswordForm },
   { path: AppConst.REGISTER_CALLBACK_URL, component: RegisterCallback },
   { path: '/book/:id', component: BookDetail },
-  { path: '/loadcoin', component: LoadCoin },
-  { path: '/userProfile', component: UserProfile },
+  { path: AppConst.LOAD_COIN_URL, component: LoadCoin },
+  { path: AppConst.LOAD_COIN_URL + '/redirect', component: RedirectLoadCoin },
+  { path: AppConst.USER_PROFILE_URL, component: UserProfile },
   { path: '/bookmark', component: BookMarkList },
   { path: '/search', component: SearchBook },
 

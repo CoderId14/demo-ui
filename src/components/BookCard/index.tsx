@@ -1,4 +1,5 @@
 
+
 import styled from 'styled-components'
 import { Card, Image, Row, Typography } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
@@ -9,6 +10,8 @@ import { AppConst } from '@/app-const'
 
 const { Text } = Typography
 
+const CardWrapper = styled(Card)`
+`
 const TitleText = styled(Text)`
   font-size: 16px;
   font-weight: 600;
@@ -51,43 +54,38 @@ interface Props {
 
 const BookCard = ({ id, title, thumbnailUrl, latestChapters }: Props) => {
   return (
-    <Card
-      key={id}
-      cover={
-        <NavLink to={AppConst.BOOK_DETAIL_URL + id}>
-          <Image
-            alt={title}
-            src={thumbnailUrl}
-            preview={false}
-            style={{
-              objectFit: 'cover',
-              height: '100%',
-              width: '100%'
-            }}
-          />
-        </NavLink>
-      }
-    >
-      <NavLink to={AppConst.BOOK_DETAIL_URL + id}>
-        <TitleText strong>{title}</TitleText>
-      </NavLink>
-      {latestChapters.map((chapter) => (
-        <ChapterWrapper key={chapter.id}>
-          <>
-            <ChapterTitle>
-              <NavLink to={`/book/${id}/chapter/${chapter?.id}`}>Chapter {chapter.chapterNumber}</NavLink>
-            </ChapterTitle>
-            <ChapterTime>
-              <ClockIcon />
-              {formatDistance(new Date(chapter.modifiedDate), new Date(), {
-                addSuffix: true
-              })}
-            </ChapterTime>
-          </>
-        </ChapterWrapper>
-      ))}
-    </Card>
+    <NavLink to={AppConst.BOOK_DETAIL_URL + id}>
+      <CardWrapper
+        key={id}
+        cover={
+            <Image
+              alt={title}
+              src={thumbnailUrl}
+              preview={false}
+              style={{ height: '300px', minHeight: '300px', objectFit: 'cover' }}
+            />
+        }
+      >
+          <TitleText strong>{title}</TitleText>
+        {latestChapters.map((chapter) => (
+          <ChapterWrapper key={chapter.id}>
+            <>
+              <ChapterTitle>
+                <NavLink to={`/book/${id}/chapter/${chapter?.id}`}>Chapter {chapter.chapterNumber}</NavLink>
+              </ChapterTitle>
+              <ChapterTime>
+                <ClockIcon />
+                {formatDistance(new Date(chapter.modifiedDate), new Date(), {
+                  addSuffix: true
+                })}
+              </ChapterTime>
+            </>
+          </ChapterWrapper>
+        ))}
+      </CardWrapper>
+    </NavLink>
   )
 }
 
 export default BookCard
+

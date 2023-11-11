@@ -96,7 +96,7 @@ function Login() {
           <Checkbox>Remember</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Button type='primary' htmlType='submit' block loading={isFetching}>
+          <Button type='primary' htmlType='submit' block loading={isFetching != undefined ? isFetching : false}>
             Login
           </Button>
         </Form.Item>
