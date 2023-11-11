@@ -25,6 +25,11 @@ function RatingSection({ bookId }: Props) {
 
   return (
     <List
+      pagination={{
+        position: 'bottom',
+        align: 'center',
+        pageSize: 10
+      }}
       dataSource={data?.content}
       renderItem={(item: IBookRating) => (
         <Row key={item.id} style={{ marginBottom: '16px' }}>
@@ -55,7 +60,7 @@ function RatingSection({ bookId }: Props) {
         </Row>
       )}
     />
-  );
+  )
 }
 
 export default RatingSection;

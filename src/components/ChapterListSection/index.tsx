@@ -1,43 +1,59 @@
-import { ReadOutlined, SortAscendingOutlined } from '@ant-design/icons'
-import { Divider, Space, Skeleton, List, Typography, Alert, Row, Col } from 'antd'
-import { formatDistance } from 'date-fns'
-import { memo } from 'react'
+import { ReadOutlined, SortAscendingOutlined } from '@ant-design/icons';
+import { Alert, Col, Divider, List, Row, Skeleton, Space, Typography } from 'antd';
+import { formatDistance } from 'date-fns';
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
-import { useFetchChapters } from '@/services/client/chapterService'
-import { Chapter } from '@/types/chapter/chapter.type'
-import { Link } from 'react-router-dom'
-import { AppConst } from '@/app-const'
-const { Title, Paragraph } = Typography
+import { useFetchChapters } from '@/services/client/chapterService';
+import { Chapter } from '@/types/chapter/chapter.type';
+import { AppConst } from '@/app-const';
+
+const { Title, Paragraph } = Typography;
+
 interface Props {
-  bookId: number
+  bookId: number;
 }
+
 function ChapterListSection({ bookId }: Props) {
-  console.log('ChapterListSection re rendered')
+  console.log('ChapterListSection re rendered');
+
   const { data, error, isFetching } = useFetchChapters({
-    book: bookId
-  })
+    book: bookId,
+  });
+
   if (isFetching) {
-    return <Skeleton></Skeleton>
+    return <Skeleton />;
   }
+
   if (error) {
-    return <Alert message='Error' description='Some error occurred while fetching chapters' type='error' showIcon />
+    return (
+      <Alert
+        message="Error"
+        description="Some error occurred while fetching chapters"
+        type="error"
+        showIcon
+      />
+    );
   }
+
   if (!data) {
-    return <Skeleton></Skeleton>
+    return <Skeleton />;
   }
-  const chapterData: Chapter[] = data.content
-  const latestChapter = chapterData[0]
+
+  const chapterData: Chapter[] = data.content;
+  const latestChapter = chapterData[0];
+
   return (
     <>
-      <Divider orientation='left'>
-        <Space className='d-flex align-items-center'>
+      <Divider orientation="left">
+        <Space className="d-flex align-items-center">
           <ReadOutlined style={{ fontSize: 32 }} />
           <Title level={3}>Chapter List</Title>
         </Space>
       </Divider>
+
       <Row>
         <Col span={23}>
-          <Space align='center'>
             {latestChapter && (
               <>
                 <Title level={5}>
@@ -45,18 +61,20 @@ function ChapterListSection({ bookId }: Props) {
                 </Title>
                 <Paragraph>
                   {formatDistance(new Date(latestChapter.modifiedDate), new Date(), {
-                    addSuffix: true
+                    addSuffix: true,
                   })}
                 </Paragraph>
               </>
             )}
-          </Space>
         </Col>
+
         <Col>
           <SortAscendingOutlined />
         </Col>
       </Row>
-      <Divider></Divider>
+
+      <Divider />
+
       <List
         bordered
         dataSource={chapterData}
@@ -69,7 +87,7 @@ function ChapterListSection({ bookId }: Props) {
         )}
       />
     </>
-  )
+  );
 }
 
-export default memo(ChapterListSection)
+export default memo(ChapterListSection);

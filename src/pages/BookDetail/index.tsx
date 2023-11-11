@@ -5,6 +5,7 @@ import ChapterListSection from '@/components/ChapterListSection'
 import BookInfoSection from '@/components/BookInfoSection'
 import RatingSection from './RatingSection'
 import ButtonModalBookRating from './ButtonModalBookRating'
+import SimilarSection from './SimilarSection'
 // let cx = classNames.bind(styles);
 const BookDetail = () => {
   const { id } = useParams()
@@ -17,6 +18,7 @@ const BookDetail = () => {
       <Divider></Divider>
       <ButtonModalBookRating bookId={Number(id)}></ButtonModalBookRating>
       <RatingSection bookId={Number(id)}></RatingSection>
+      <SimilarSection bookId={Number(id)}></SimilarSection>
     </>
   )
 }
