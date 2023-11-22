@@ -22,6 +22,10 @@ export namespace AppConst {
   export const ERROR_PAGE = '/error'
   export const ERROR_PAGE_403 = '/error_403'
 
+  //writer
+  export const WRITER_DASHBOARD_URL = '/writer/dashboard'
+  export const WRITER_CREATE_BOOK = '/writer/book/create'
+
   // messages
   export const LOGIN_FAILED_400 = 'Username not exist'
   export const LOGIN_FAILED_401 = 'Password not valid'

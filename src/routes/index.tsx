@@ -17,6 +17,8 @@ import BookMarkList from '@/pages/BookMarkList'
 import LoadCoin from '@/pages/LoadCoin'
 import UserProfile from '@/pages/UserProfile'
 import RedirectLoadCoin from '@/pages/LoadCoin/RedirectLoadCoin'
+import DashBoardWriter from '@/pages/Writer/DashBoard'
+import CreateBook from '@/pages/Writer/WorkSpace/CreateBook'
 
 const publicRoutes = [
   { path: AppConst.LOGIN_URL, component: Login },
@@ -41,11 +43,10 @@ const publicRoutes = [
 const privateRoutes = [{ path: AppConst.HOME_URL, component: Home }]
 
 const specialRoutes = [{ path: '/book/:bookId/chapter/:chapterId', component: ChapterDetail }]
-const adminRoutes = [
-  //todo
-  {
-    path: AppConst.ADD_RACER_TO_GRAND_PRIX_URL,
-    component: ErrorPage403
-  }
+const writerRoutes = [
+
+  { path: AppConst.WRITER_DASHBOARD_URL, component: DashBoardWriter },
+  { path: AppConst.WRITER_CREATE_BOOK, component: CreateBook },
+
 ]
-export { publicRoutes, privateRoutes, adminRoutes, specialRoutes }
+export { publicRoutes, privateRoutes, specialRoutes, writerRoutes }

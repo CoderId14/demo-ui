@@ -1,7 +1,7 @@
 
 import classNames from 'classnames/bind'
 import styles from './search.module.scss'
-import { Button, Col, DatePicker, Divider, Form, Input, Row, Select, SelectProps, Skeleton, Space } from 'antd'
+import { Button, Card, DatePicker, Divider, Form, Input, Select, SelectProps, Skeleton, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { useFetchCategories } from '@/services/client/categoryService'
 import { Category } from '@/types/category/category.type'
@@ -103,45 +103,41 @@ function SearchBook() {
       onFinish={onFinish}
       initialValues={{
         title: state.title,
-        categories: state.categories ? { label: state.categories.values().next().value, value: state.categories.keys().next().value } : undefined,
+        categories: state.categories
+          ? { label: state.categories.values().next().value, value: state.categories.keys().next().value }
+          : undefined,
         tags: state.tags
       }}
     >
-      <Row justify={'center'}>
+      <Card title='Search Options'>
         <Form.Item name='title' label='Title' className={cx('search mt-32')}>
           <Input></Input>
         </Form.Item>
-      </Row>
-      <Row justify={'space-between'}>
-        <Col span={8}>
-          <Form.Item label='Categories' name='categories'>
-            <Select
-              mode='multiple'
-              allowClear
-              style={{ width: '100%' }}
-              placeholder='Please select'
-              options={categoryOptions}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item label='Tags' name='tags'>
-            <Select
-              mode='multiple'
-              allowClear
-              style={{ width: '100%' }}
-              placeholder='Please select'
-              options={tagOptions}
-            />
-          </Form.Item>
-        </Col>
-        <Col>
-          <Form.Item name='createdDate' label='Publish Date' {...rangeConfig}>
-            <RangePicker />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row justify={'center'}>
+
+        <Form.Item label='Categories' name='categories'>
+          <Select
+            mode='multiple'
+            allowClear
+            style={{ width: '100%' }}
+            placeholder='Please select'
+            options={categoryOptions}
+          />
+        </Form.Item>
+
+        <Form.Item label='Tags' name='tags'>
+          <Select
+            mode='multiple'
+            allowClear
+            style={{ width: '100%' }}
+            placeholder='Please select'
+            options={tagOptions}
+          />
+        </Form.Item>
+
+        <Form.Item name='createdDate' label='Publish Date' {...rangeConfig}>
+          <RangePicker />
+        </Form.Item>
+
         <Form.Item>
           <Space>
             <Button type='primary' htmlType='submit'>
@@ -156,8 +152,8 @@ function SearchBook() {
             </Button>
           </Space>
         </Form.Item>
-      </Row>
-      <Divider></Divider>
+      </Card>
+      <Divider />
       <ListCard books={bookData ? bookData : []}></ListCard>
     </Form>
   )

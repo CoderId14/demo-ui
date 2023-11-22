@@ -15,10 +15,11 @@ export function convertBookToBookDetails(book: Book): BookDetails {
     viewCount: book.viewCount,
     likeCount: book.likeCount,
     averageRating: book.averageRating,
+    reviewCount: book.reviewCount,
+    totalChapter: book.totalChapter,
     premium: book.premium,
-    liked: book.liked,
     novel: book.novel,
-    reviewCount: book.reviewCount
+    liked: book.liked
   }
 }
 

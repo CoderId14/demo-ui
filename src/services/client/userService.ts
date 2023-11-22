@@ -1,5 +1,6 @@
 import { getUserInfo } from '@/apiRequests/user'
 import axiosInstance, { ErrorResponse } from '@/config/axios'
+import { UserInfo } from '@/types/user/user.type'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { toast } from 'react-toastify'

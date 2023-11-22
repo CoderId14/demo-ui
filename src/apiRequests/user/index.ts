@@ -1,4 +1,5 @@
 import axiosInstance, { ErrorResponse } from '@/config/axios'
+import { UserInfo } from '@/types/user/user.type'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 

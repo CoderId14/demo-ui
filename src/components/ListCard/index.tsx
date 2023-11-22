@@ -38,6 +38,7 @@ const ListCard: React.FC<Props> = ({ books, pageSize, isPageable = true}) => {
             latestChapters={item.latestChapters}
             title={item.title}
             thumbnailUrl={item.thumbnailUrl}
+            isPremium={item.premium}
           />
         </List.Item>
       )}

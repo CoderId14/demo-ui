@@ -2,7 +2,7 @@
 
 import styled from 'styled-components'
 import { Card, Image, Row, Typography } from 'antd'
-import { ClockCircleOutlined } from '@ant-design/icons'
+import { ClockCircleOutlined, StarFilled } from '@ant-design/icons'
 import { LatestChapter } from '@/types/chapter/chapter.type'
 import { formatDistance } from 'date-fns'
 import { NavLink } from 'react-router-dom'
@@ -50,9 +50,10 @@ interface Props {
   title: string
   thumbnailUrl: string
   latestChapters: LatestChapter[]
+  isPremium: boolean
 }
 
-const BookCard = ({ id, title, thumbnailUrl, latestChapters }: Props) => {
+const BookCard = ({ id, title, thumbnailUrl, latestChapters, isPremium }: Props) => {
   return (
     <NavLink to={AppConst.BOOK_DETAIL_URL + id}>
       <CardWrapper
@@ -66,12 +67,13 @@ const BookCard = ({ id, title, thumbnailUrl, latestChapters }: Props) => {
             />
         }
       >
-          <TitleText strong>{title}</TitleText>
+          <TitleText strong>{title} {isPremium && <StarFilled style={{'color': 'yellow'}}></StarFilled>}</TitleText>
         {latestChapters.map((chapter) => (
           <ChapterWrapper key={chapter.id}>
             <>
               <ChapterTitle>
-                <NavLink to={`/book/${id}/chapter/${chapter?.id}`}>Chapter {chapter.chapterNumber}</NavLink>
+                <NavLink to={`/book/${id}/chapter/${chapter?.id}`}>Chapter {chapter.chapterNumber} 
+                </NavLink>
               </ChapterTitle>
               <ChapterTime>
                 <ClockIcon />

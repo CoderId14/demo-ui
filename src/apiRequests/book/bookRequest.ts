@@ -1,7 +1,9 @@
 import { toast } from 'react-toastify'
 import { BookMarkParamRequest, BookParamRequest } from '../../types/book/bookSearch.type'
 import {
+  BookAddInfo,
   BookResponse,
+  BookUpdateInfo,
   IAddRatingRequest,
   IBookRating,
   IBookRatingResponse,
@@ -62,6 +64,70 @@ export const searchBook = async (params: BookParamRequest) => {
     }
   }
 }
+
+export const updateBook = async (info: BookUpdateInfo) => {
+  try {
+    const res = await axiosInstance.put<BookResponse>('/book/v1/' + info.id, info)
+
+    return res.data
+  } catch (error: any) {
+    if (axios.isCancel(error)) {
+      // request was cancelled
+    } else if (error.response) {
+      // server returned an error
+      const data = error.response.data as any
+      toast.error(data.message)
+      return { error: data } as ErrorResponse
+    } else {
+      // network error
+      toast.error('Network error occurred.')
+      return { error: 'Network error occurred.' } as ErrorResponse
+    }
+  }
+}
+
+export const addBook = async (info: BookAddInfo) => {
+  try {
+    const res = await axiosInstance.post<BookResponse>('/book/v1', info)
+
+    return res.data
+  } catch (error: any) {
+    if (axios.isCancel(error)) {
+      // request was cancelled
+    } else if (error.response) {
+      // server returned an error
+      const data = error.response.data as any
+      toast.error(data.message)
+      return { error: data } as ErrorResponse
+    } else {
+      // network error
+      toast.error('Network error occurred.')
+      return { error: 'Network error occurred.' } as ErrorResponse
+    }
+  }
+}
+
+export const deleteBook = async (bookId: string | number) => {
+  try {
+    const res = await axiosInstance.delete<ApiResponse>('/book/v1/' + bookId)
+
+    return res.data
+  } catch (error: any) {
+    if (axios.isCancel(error)) {
+      // request was cancelled
+    } else if (error.response) {
+      // server returned an error
+      const data = error.response.data as any
+      toast.error(data.message)
+      return { error: data } as ErrorResponse
+    } else {
+      // network error
+      toast.error('Network error occurred.')
+      return { error: 'Network error occurred.' } as ErrorResponse
+    }
+  }
+}
+
 export const searchBookMark = async (params: BookMarkParamRequest) => {
   try {
     const res = await axiosInstance.get<BookResponse>('/user/v1/get-books-liked', {

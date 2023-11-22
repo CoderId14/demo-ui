@@ -1,17 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import 'react-toastify/dist/ReactToastify.css'
-import { adminRoutes, privateRoutes, publicRoutes, specialRoutes } from '@/routes/index'
+import { privateRoutes, publicRoutes, specialRoutes, writerRoutes } from '@/routes/index'
 import { ToastContainer } from 'react-toastify'
 // import PrivateRoutes from "@/routes/PrivateRoutes";
 import './App.scss'
 import { useSelector } from 'react-redux'
 import { selectAuth } from './redux/store'
 import PrivateRoute from './routes/PrivateRoute'
-import AdminRoute from './routes/AdminRoute'
 import MainLayout from './layouts/mainLayout'
-import AdminLayout from './layouts/adminLayout'
 import SpecialLayout from './layouts/specialLayout'
+import DashLayout from './layouts/dashLayout'
 function App() {
   const user = useSelector(selectAuth).login.user
   // const navigate = useNavigate();
@@ -50,22 +49,7 @@ function App() {
                 ></Route>
               )
             })}
-            {adminRoutes.map((route, index) => {
-              const Page = route.component
-              return (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={
-                    <AdminRoute isAllowed={!!user && user?.roles.includes('ROLE_ADMIN')}>
-                      <AdminLayout>
-                        <Page />
-                      </AdminLayout>
-                    </AdminRoute>
-                  }
-                ></Route>
-              )
-            })}
+
             {specialRoutes.map((route, index) => {
               const Page = route.component
               return (
@@ -76,6 +60,20 @@ function App() {
                     <SpecialLayout>
                       <Page />
                     </SpecialLayout>
+                  }
+                ></Route>
+              )
+            })}
+            {writerRoutes.map((route, index) => {
+              const Page = route.component
+              return (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={
+                    <DashLayout>
+                      <Page />
+                    </DashLayout>
                   }
                 ></Route>
               )

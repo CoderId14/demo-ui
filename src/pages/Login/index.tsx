@@ -7,13 +7,12 @@ import { selectAuth } from '@/redux/store'
 import { SubmitHandler } from 'react-hook-form'
 import { loginUser } from '@/apiRequests/loginRequest'
 import { formSchema } from './yupSchema'
-import { Button, Checkbox, Form, Input, Typography } from 'antd'
+import { Button, Checkbox, Form, Input, Typography, message } from 'antd'
 
 import { GooglePlusOutlined } from '@ant-design/icons'
 
 import classNames from 'classnames/bind'
 import styles from './Login.module.scss'
-import { toast } from 'react-toastify'
 import { HOST_NAME } from '@/environments'
 const cx = classNames.bind(styles)
 
@@ -34,7 +33,7 @@ function Login() {
   const [form] = Form.useForm()
   useEffect(() => {
     if (user) {
-      toast.info('You already login')
+      message.info('You already login')
       navigate('/')
     }
   })
