@@ -13,6 +13,7 @@ import { useEffect } from 'react'
 const cx = classNames.bind(styles)
 
 interface IFormInput {
+  name: string
   username: string
   password: string
   rePassword: string
@@ -36,10 +37,11 @@ function Register() {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log('data from form: ', data)
     console.log('test ', form.getFieldValue('username'))
-    const { username, password, email } = data
+    const { username, password, email, name } = data
     const request = {
       username: username,
       password: password,
+      name: name,
       email: email
     }
     console.log('data request: ', request)
@@ -95,6 +97,9 @@ function Register() {
         initialValues={{ remember: true }}
         autoComplete='off'
       >
+        <Form.Item name='name' rules={[yupSync]}>
+          <Input placeholder='Full name'></Input>
+        </Form.Item>
         <Form.Item name='username' rules={[yupSync]}>
           <Input onChange={debounceOnChangeUsername} placeholder='Username'></Input>
         </Form.Item>

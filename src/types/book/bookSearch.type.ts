@@ -12,6 +12,7 @@ export interface BookParamRequest {
   page?: number
   size?: number
   detail?: boolean | string
+  isActive?: boolean
 }
 
 export interface BookMarkParamRequest {

@@ -1,74 +1,63 @@
-import axiosInstance from '@/config/axios'
+import Sider from '@/components/sider'
+import { Layout } from 'antd'
+import UserInfoSection from './UserInfo'
+import { NavLink } from 'react-router-dom'
+import { AppConst } from '@/app-const'
 import { useFetchUserInfo } from '@/services/client/userService'
-import { useQueryClient } from '@tanstack/react-query'
-import { Button, Form, Image, Input, Modal, Row, Skeleton, Tag, message } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+export type Item = {
+  key: string
+  icon?: JSX.Element | undefined
+  label: string | JSX.Element
+}
+
+interface SiderProps{
+  collapsed: boolean
+  items: Item[]
+}
+
 function UserProfile() {
-  const { data, isFetching } = useFetchUserInfo()
-  const queryClient = useQueryClient()
-
-  const handleOk = async () => {
-    try {
-      const response = await axiosInstance.get('/user/v1/open-premium')
-      queryClient.invalidateQueries({queryKey: ['user']})
-      message.success(response.data)
-      setIsModalOpen(false)
-    } catch (error: any) {
-      message.error(error.message)
+  const { data } = useFetchUserInfo();
+  const [permission, setPermission] = useState<boolean>(false);
+  const siderProps: SiderProps = {
+    collapsed: false,
+    items: [
+      {
+        key: 'sub-1',
+        icon: undefined,
+        label: 'User Profile'
+      },
+      {
+        key: 'sub-2',
+        icon: undefined,
+        label: 'User Book'
+      },
+      {
+        key: 'sub-3',
+        icon: undefined,
+        label: 'User History'
+      },
+      {
+        key: 'sub-4',
+        icon: undefined,
+        label: permission ? <NavLink to={AppConst.WRITER_DASHBOARD_URL}>Creator</NavLink> : <></>
+      }
+    ]
+  }
+  useEffect(() => {
+    if (data) {
+      setPermission(data?.roles?.find((role) => role.match('ROLE_WRITER'))? true : false);
     }
-  }
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  if (isFetching) {
-    return <Skeleton />
-  }
+  }, [data])
   return (
     <>
-      <Row justify={'center'}>
-        <Image
-          src={data?.avatar || 'https://cdnimg.vietnamplus.vn/uploaded/xpcwvovt/2023_04_26/avatar.jpg'}
-          style={{ height: '200px' }}
-        ></Image>
-      </Row>
-      <Row
-        style={{
-          backgroundColor: '#f5f6fc',
-          marginBottom: 48
-        }}
-        gutter={16}
-        justify={'center'}
-      >
-        <Row style={{ marginTop: 10, marginBottom: 30 }}>
-          <Form initialValues={{ name: data?.name, coin: data?.coin }}>
-            <Form.Item label='Name' name={'name'}>
-              <Input disabled></Input>
-            </Form.Item>
-            <Form.Item label='Coin' name={'coin'}>
-              <Input disabled></Input>
-            </Form.Item>
-
-            {data?.roles?.find((role) => role.match('ROLE_USER_VIP')) ? (
-              <Tag color='magenta'>VIP</Tag>
-            ) : (
-              <Button type='primary' onClick={showModal}>
-                <a>OPEN VIP</a>
-              </Button>
-            )}
-            <Modal title='OPEN VIP' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-              <p>Cost of open VIP is <strong>100</strong> coin. Are you agree? </p>
-            </Modal>
-          </Form>
-        </Row>
-      </Row>
+      <Layout>
+        <Sider collapsed={siderProps.collapsed} items={siderProps.items}></Sider>
+        <Layout.Content>
+          <UserInfoSection></UserInfoSection>
+        </Layout.Content>
+        
+      </Layout>
     </>
   )
 }

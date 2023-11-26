@@ -1,6 +1,14 @@
 import yup from '@/Utils/yupGlobal'
 
 export const formSchema = yup.object().shape({
+  name: yup
+  .string()
+  .required('Full Name is required')
+  .matches(
+    /^(?=.{4,50}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+    "Name don't contain special characters"
+  )
+  .max(50, ' Full Name length cannot exceed more than 50 characters'),
   username: yup
     .string()
     .required('Username is required')

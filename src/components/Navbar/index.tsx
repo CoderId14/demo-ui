@@ -72,7 +72,7 @@ export const NavbarMain = () => {
           </div>
         ) : (
           <Button type='primary' size='large'>
-            Login
+            <Link to={AppConst.LOGIN_URL}>Login</Link>
           </Button>
         )}
       </Header>

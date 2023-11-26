@@ -11,11 +11,6 @@ export namespace AppConst {
   export const HOME_ADMIN_URL = '/admin/home'
   export const LOAD_COIN_URL = '/load-coin'
   export const HOME_URL = '/'
-  export const RACER_RANKING_URL = '/bxh-racer'
-  export const GRAND_PRIX_URL = '/admin/grandPrix'
-  export const RACE_TEAM_URL = '/admin/raceTeams'
-  export const RACER_RESULT_DETAIL_URL = '/result/racer/'
-  export const ADD_RACER_TO_GRAND_PRIX_URL = '/admin/race-team/addRacer/'
   export const BOOK_DETAIL_URL = '/book/'
   export const CHAPTER_DETAIL_URL = '/chapter/'
   export const USER_PROFILE_URL = '/user/profile'
@@ -25,7 +20,14 @@ export namespace AppConst {
   //writer
   export const WRITER_DASHBOARD_URL = '/writer/dashboard'
   export const WRITER_CREATE_BOOK = '/writer/book/create'
+  //book
+  export const WRITER_EDIT_BOOK_URL = '/writer/book/edit/'
 
+  //chapter
+  export const WRITER_ADD_CHAPTER_URL = '/writer/chapter/add/'
+  export const WRITER_ADD_CHAPTER_IMG_URL = '/writer/chapter-image/add/'
+  export const WRITER_EDIT_CHAPTER_URL = '/writer/chapter/edit/'
+  export const WRITER_EDIT_CHAPTER_IMG_URL = '/writer/chapter-image/edit/'
   // messages
   export const LOGIN_FAILED_400 = 'Username not exist'
   export const LOGIN_FAILED_401 = 'Password not valid'

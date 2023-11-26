@@ -1,7 +1,7 @@
 import { Layout, Menu } from 'antd'
 import { memo } from 'react'
 
-type Item = {
+export type Item = {
   key: string
   icon?: JSX.Element | undefined
   label: string | JSX.Element

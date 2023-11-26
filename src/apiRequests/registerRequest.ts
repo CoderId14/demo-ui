@@ -45,6 +45,7 @@ export const isUsernameExist = async (username: string, dispatch: Dispatch, _nav
 }
 
 interface UserRegister {
+  name: string
   username: string
   email: string
   password: string

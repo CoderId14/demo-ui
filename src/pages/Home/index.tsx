@@ -7,7 +7,7 @@ import { BookDetails } from '@/types/book/book.type'
 import { convertBooksToBookDetails } from '@/Utils/convert'
 const { Title } = Typography
 const Home = () => {
-  const { data, isFetching } = useFetchBooks({ detail: true })
+  const { data, isFetching } = useFetchBooks({ detail: true, isActive: true })
   const { data: bookRecommend, isFetching: isFetchingRecommend } = useFetchBookRecommendations();
   let bookData: BookDetails[] = []
   let letBookRecommend: BookDetails[] = []

@@ -13,6 +13,9 @@ import Highlighter from 'react-highlight-words'
 import { SearchOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '@/redux/store'
+import styles from './WriterDash.module.scss'
+import classNames from 'classnames/bind'
+const cx = classNames.bind(styles)
 interface DataType {
   key: string | number
   bookName: string
@@ -22,6 +25,7 @@ interface DataType {
   tags: string[]
   views: number
   likes: number
+  active: boolean
 }
 interface TableParams {
   pagination?: TablePaginationConfig
@@ -42,7 +46,8 @@ function convertToDataTable(data: BookDetails[]) {
       categories: book.categories.map((category) => category.categoryName) || [],
       tags: book.tags.map((tag) => tag.tagName) || [],
       views: book.viewCount,
-      likes: book.likeCount
+      likes: book.likeCount,
+      active: book.active
     }
     dataTable.push(tempData)
   })
@@ -67,7 +72,8 @@ const DashBoardWriter: React.FC = () => {
     detail: true,
     user: user?.userId ? user.userId : undefined,
     page: tableParams.pagination?.current ? tableParams.pagination.current - 1 : 0,
-    size: 30
+    size: 30,
+    isActive: undefined
   })
   const { data, isFetching } = useFetchBooks(searchParams)
   useEffect(() => {
@@ -252,7 +258,7 @@ const DashBoardWriter: React.FC = () => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <Link to={'edit' + record.key}>Edit</Link>
+          <Link to={AppConst.WRITER_EDIT_BOOK_URL + record.key}>Edit</Link>
           <Popconfirm title='Sure to delete?' onConfirm={() => handleDelete(record.key)}>
             <a>Delete</a>
           </Popconfirm>
@@ -287,6 +293,7 @@ const DashBoardWriter: React.FC = () => {
         </Button>
       </Row>
       <Table
+        rowClassName={(record) => record.active ? cx('table-row-light') :  cx('table-row-yellow')}
         columns={columns}
         dataSource={dataTable}
         rowKey={(record) => record.key}

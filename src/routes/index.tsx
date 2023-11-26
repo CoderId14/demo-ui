@@ -18,7 +18,10 @@ import LoadCoin from '@/pages/LoadCoin'
 import UserProfile from '@/pages/UserProfile'
 import RedirectLoadCoin from '@/pages/LoadCoin/RedirectLoadCoin'
 import DashBoardWriter from '@/pages/Writer/DashBoard'
-import CreateBook from '@/pages/Writer/WorkSpace/CreateBook'
+import CreateBook from '@/pages/Writer/WorkSpace/Book/CreateBook'
+import ChapterAdd from '@/pages/Writer/WorkSpace/Chapter/ChapterAdd'
+import ChapterEdit from '@/pages/Writer/WorkSpace/Chapter/ChapterEdit'
+import BookEdit from '@/pages/Writer/WorkSpace/Book/EditBook'
 
 const publicRoutes = [
   { path: AppConst.LOGIN_URL, component: Login },
@@ -47,6 +50,11 @@ const writerRoutes = [
 
   { path: AppConst.WRITER_DASHBOARD_URL, component: DashBoardWriter },
   { path: AppConst.WRITER_CREATE_BOOK, component: CreateBook },
+  { path: AppConst.WRITER_EDIT_BOOK_URL + ":bookId", component: BookEdit },
+
+  {path: AppConst.WRITER_ADD_CHAPTER_URL + ':id', component: ChapterAdd},
+  {path: AppConst.WRITER_EDIT_CHAPTER_URL + ':id', component: ChapterEdit},
+
 
 ]
 export { publicRoutes, privateRoutes, specialRoutes, writerRoutes }

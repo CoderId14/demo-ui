@@ -26,7 +26,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useFetchBooks(params: BookParamRequest) {
   const queryClient = useQueryClient()
-
+  // params?.isActive === undefined && (params.isActive = true)
+  console.log(params)
   const queryKey = ['books', params]
 
   const queryOptions = {
@@ -64,7 +65,6 @@ export function useAddBook() {
     onMutate: async (_newBook) => {
       await queryClient.cancelQueries(['books'])
       const previouBooks = queryClient.getQueryData(['books'])
-      queryClient.invalidateQueries({ queryKey: ['books'] })
       // Return a context object with the snapshotted value
       return { previouBooks }
     },

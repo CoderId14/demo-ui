@@ -17,10 +17,11 @@ import { ApiResponse } from '@/types/common.type'
 export const fetchRecommendations = async () => {
   try {
     const res = await axiosInstance.get<BookResponse>('/book/v1/viewCount', {
-      headers: {
-        'content-type': 'application/json'
+      params: {
+        "book.isActive": true
       }
-    })
+    }
+    )
 
     return res.data
   } catch (error: any) {
@@ -88,7 +89,7 @@ export const updateBook = async (info: BookUpdateInfo) => {
 
 export const addBook = async (info: BookAddInfo) => {
   try {
-    const res = await axiosInstance.post<BookResponse>('/book/v1', info)
+    const res = await axiosInstance.post<BookResponse>('/writer/book/v1', info)
 
     return res.data
   } catch (error: any) {
